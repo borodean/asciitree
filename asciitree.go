@@ -21,8 +21,8 @@ type Node struct {
 // Sprint returns the node's visual representation.
 func Sprint(t *Node, opts ...SprintOption) string {
 	options := newSprintOptions(opts...)
-	sortChildren(t, options)
-	return t.Title + t.printChildren("")
+	sorted := sortChildren(t, options)
+	return sorted.Title + sorted.printChildren("")
 }
 
 func (t *Node) isBranch() bool {
@@ -48,9 +48,11 @@ func (t *Node) printChildren(prefix string) string {
 }
 
 func sortChildren(t *Node, options sprintOptions) *Node {
-	sort.SliceStable(t.Children, func(i, j int) bool {
-		a := t.Children[i]
-		b := t.Children[j]
+	copy := *t
+	copy.Children = append([]*Node(nil), copy.Children...)
+	sort.SliceStable(copy.Children, func(i, j int) bool {
+		a := copy.Children[i]
+		b := copy.Children[j]
 		if options.branchesFirst && a.isBranch() && !b.isBranch() {
 			return true
 		}
@@ -59,8 +61,8 @@ func sortChildren(t *Node, options sprintOptions) *Node {
 		}
 		return false
 	})
-	for _, child := range t.Children {
-		sortChildren(child, options)
+	for i, child := range copy.Children {
+		copy.Children[i] = sortChildren(child, options)
 	}
-	return t
+	return &copy
 }

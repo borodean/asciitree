@@ -71,6 +71,24 @@ func TestSprint(t *testing.T) {
 }
 
 func TestSprint_options(t *testing.T) {
+	NewSample := func() *Node {
+		return &Node{Title: "alfa", Children: []*Node{
+			{Title: "charlie.txt"},
+			{Title: "bravo", Children: []*Node{
+				{Title: "golf.txt"},
+				{Title: "foxtrot", Children: []*Node{
+					{Title: "india.txt"},
+				}},
+				{Title: "hotel", ForceBranch: true},
+			}},
+			{Title: "kilo", Children: []*Node{
+				{Title: "juliet.txt"},
+			}},
+			{Title: "delta", ForceBranch: true},
+			{Title: "echo.txt"},
+		}}
+	}
+
 	tests := []struct {
 		name string
 		give []SprintOption
@@ -134,23 +152,10 @@ func TestSprint_options(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tree := &Node{Title: "alfa", Children: []*Node{
-				{Title: "charlie.txt"},
-				{Title: "bravo", Children: []*Node{
-					{Title: "golf.txt"},
-					{Title: "foxtrot", Children: []*Node{
-						{Title: "india.txt"},
-					}},
-					{Title: "hotel", ForceBranch: true},
-				}},
-				{Title: "kilo", Children: []*Node{
-					{Title: "juliet.txt"},
-				}},
-				{Title: "delta", ForceBranch: true},
-				{Title: "echo.txt"},
-			}}
+			tree := NewSample()
 			got := Sprint(tree, tt.give...)
 			assert.Equal(t, got, tt.want)
+			assert.DeepEqual(t, tree, NewSample())
 		})
 	}
 }
