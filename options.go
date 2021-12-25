@@ -12,7 +12,7 @@ type sprintOptions struct {
 
 type (
 	branchesFirstOption bool
-	sortByTitle         bool
+	sortByTitleOption   bool
 )
 
 // WithBranchesFirst is an option that makes the Sprint method print branches
@@ -24,14 +24,14 @@ func WithBranchesFirst(value bool) SprintOption {
 // WithSortByTitle is an option that makes the Sprint method print nodes in
 // an alphanumerical order.
 func WithSortByTitle(value bool) SprintOption {
-	return sortByTitle(value)
+	return sortByTitleOption(value)
 }
 
 func (d branchesFirstOption) apply(opts *sprintOptions) {
 	opts.branchesFirst = bool(d)
 }
 
-func (s sortByTitle) apply(opts *sprintOptions) {
+func (s sortByTitleOption) apply(opts *sprintOptions) {
 	opts.sortByTitle = bool(s)
 }
 
@@ -45,3 +45,4 @@ func newSprintOptions(opts ...SprintOption) sprintOptions {
 
 // Verify that branchesFirstOption implements asciitree.SprintOption
 var _ SprintOption = (*branchesFirstOption)(nil)
+var _ SprintOption = (*sortByTitleOption)(nil)
