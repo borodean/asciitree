@@ -18,7 +18,7 @@ func New(title string) *Tree {
 	return &Tree{title: title}
 }
 
-// New creates a tree node and forces it to be recognized as a branch.
+// NewBranch creates a tree node and forces it to be recognized as a branch.
 func NewBranch(title string) *Tree {
 	return &Tree{forceBranch: true, title: title}
 }
@@ -35,10 +35,10 @@ func (t *Tree) Add(titles ...string) *Tree {
 	return t
 }
 
-// AddBranch creates one or more tree nodes with the provided titles, forces
+// AddBranches creates one or more tree nodes with the provided titles, forces
 // them to be recognized as branches, and appends them to the node's children.
 //
-// Unlike NewChildBranch, AddBranch returns the original node for chaining.
+// Unlike NewChildBranch, AddBranches returns the original node for chaining.
 func (t *Tree) AddBranches(titles ...string) *Tree {
 	for _, title := range titles {
 		child := NewBranch(title)
@@ -79,7 +79,7 @@ func (t *Tree) NewChild(title string) *Tree {
 // NewChildBranch creates a tree node, forces it to be recognized as a branch,
 // and appends it to the node's children.
 //
-// Unlike AddBranch, NewChildBranch returns the newly created node.
+// Unlike AddBranches, NewChildBranch returns the newly created node.
 func (t *Tree) NewChildBranch(title string) *Tree {
 	child := NewBranch(title)
 	t.children = append(t.children, child)
