@@ -142,5 +142,5 @@ func (t *Tree) printChildren(prefix string) string {
 	return out
 }
 
-// Verify that tree implements fmt.Stringer:
+// Verify that Tree implements fmt.Stringer:
 var _ fmt.Stringer = (*Tree)(nil)
