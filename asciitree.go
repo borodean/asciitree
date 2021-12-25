@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-// Tree represents a tree node.
-type Tree struct {
+// Node represents a tree node.
+type Node struct {
 	// Children is the slice of the node's children.
-	Children []*Tree
+	Children []*Node
 	// ForceBranch reports whether the node should be forced to be recognized as a
 	// branch.
 	ForceBranch bool
@@ -18,18 +18,18 @@ type Tree struct {
 	Title string
 }
 
-// Sprint returns the tree's visual representation.
-func Sprint(t *Tree, opts ...SprintOption) string {
+// Sprint returns the node's visual representation.
+func Sprint(t *Node, opts ...SprintOption) string {
 	options := newSprintOptions(opts...)
 	sortChildren(t, options)
 	return t.Title + t.printChildren("")
 }
 
-func (t *Tree) isBranch() bool {
+func (t *Node) isBranch() bool {
 	return t.ForceBranch || len(t.Children) > 0
 }
 
-func (t *Tree) printChildren(prefix string) string {
+func (t *Node) printChildren(prefix string) string {
 	var out string
 	for i, child := range t.Children {
 		connector := "├── "
@@ -47,7 +47,7 @@ func (t *Tree) printChildren(prefix string) string {
 	return out
 }
 
-func sortChildren(t *Tree, options sprintOptions) *Tree {
+func sortChildren(t *Node, options sprintOptions) *Node {
 	sort.SliceStable(t.Children, func(i, j int) bool {
 		a := t.Children[i]
 		b := t.Children[j]

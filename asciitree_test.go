@@ -9,19 +9,19 @@ import (
 func TestSprint(t *testing.T) {
 	tests := []struct {
 		name string
-		tree *Tree
+		tree *Node
 		want string
 	}{{
 		name: "single node",
-		tree: &Tree{Title: "alfa"},
+		tree: &Node{Title: "alfa"},
 		want: `alfa`,
 	}, {
 		name: "branched nodes",
-		tree: &Tree{Title: "alfa", Children: []*Tree{
+		tree: &Node{Title: "alfa", Children: []*Node{
 			{Title: "bravo.txt"},
-			{Title: "charlie", Children: []*Tree{
+			{Title: "charlie", Children: []*Node{
 				{Title: "delta.txt"},
-				{Title: "echo", Children: []*Tree{
+				{Title: "echo", Children: []*Node{
 					{Title: "foxtrot.txt"},
 					{Title: "golf.txt"},
 				}},
@@ -36,8 +36,8 @@ func TestSprint(t *testing.T) {
         └── golf.txt`,
 	}, {
 		name: "intersected branched nodes",
-		tree: &Tree{Title: "alfa", Children: []*Tree{
-			{Title: "bravo", Children: []*Tree{
+		tree: &Node{Title: "alfa", Children: []*Node{
+			{Title: "bravo", Children: []*Node{
 				{Title: "charlie.txt"},
 			}},
 			{Title: "delta.txt"},
@@ -48,7 +48,7 @@ func TestSprint(t *testing.T) {
 └── delta.txt`,
 	}, {
 		name: "multiline titles",
-		tree: &Tree{Title: "alfa\n[dir]\n[3 MB]", Children: []*Tree{
+		tree: &Node{Title: "alfa\n[dir]\n[3 MB]", Children: []*Node{
 			{Title: "bravo.txt\n[file]\n[1 MB]"},
 			{Title: "charlie.txt\n[file]\n[2 MB]"},
 		}},
@@ -134,16 +134,16 @@ func TestSprint_options(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tree := &Tree{Title: "alfa", Children: []*Tree{
+			tree := &Node{Title: "alfa", Children: []*Node{
 				{Title: "charlie.txt"},
-				{Title: "bravo", Children: []*Tree{
+				{Title: "bravo", Children: []*Node{
 					{Title: "golf.txt"},
-					{Title: "foxtrot", Children: []*Tree{
+					{Title: "foxtrot", Children: []*Node{
 						{Title: "india.txt"},
 					}},
 					{Title: "hotel", ForceBranch: true},
 				}},
-				{Title: "kilo", Children: []*Tree{
+				{Title: "kilo", Children: []*Node{
 					{Title: "juliet.txt"},
 				}},
 				{Title: "delta", ForceBranch: true},
