@@ -39,6 +39,65 @@ func TestNewBranch(t *testing.T) {
 	}
 }
 
+func TestSprint(t *testing.T) {
+	tests := []struct {
+		name string
+		tree *Tree
+		want string
+	}{{
+		name: "single node",
+		tree: New("alfa"),
+		want: `alfa`,
+	}, {
+		name: "branched nodes",
+		tree: New("alfa").AddTrees(
+			New("bravo.txt"),
+			New("charlie").AddTrees(
+				New("delta.txt"),
+				New("echo").Add("foxtrot.txt", "golf.txt"),
+			),
+		),
+		want: `alfa
+├── bravo.txt
+└── charlie
+    ├── delta.txt
+    └── echo
+        ├── foxtrot.txt
+        └── golf.txt`,
+	}, {
+		name: "intersected branched nodes",
+		tree: New("alfa").AddTrees(
+			New("bravo").Add("charlie.txt"),
+			New("delta.txt"),
+		),
+		want: `alfa
+├── bravo
+│   └── charlie.txt
+└── delta.txt`,
+	}, {
+		name: "multiline titles",
+		tree: New("alfa\n[dir]\n[3 MB]").Add(
+			"bravo.txt\n[file]\n[1 MB]",
+			"charlie.txt\n[file]\n[2 MB]",
+		),
+		want: `alfa
+[dir]
+[3 MB]
+├── bravo.txt
+│   [file]
+│   [1 MB]
+└── charlie.txt
+    [file]
+    [2 MB]`,
+	}}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := Sprint(tt.tree)
+			assert.Equal(t, got, tt.want)
+		})
+	}
+}
+
 func TestTreeAdd(t *testing.T) {
 	tests := []struct {
 		name string
@@ -295,65 +354,6 @@ func TestTreeSort(t *testing.T) {
 			)
 			got := tree.Sort(tt.give...)
 			assert.DeepEqual(t, got, tt.want, cmpOptions)
-		})
-	}
-}
-
-func TestTreeString(t *testing.T) {
-	tests := []struct {
-		name string
-		tree *Tree
-		want string
-	}{{
-		name: "single node",
-		tree: New("alfa"),
-		want: `alfa`,
-	}, {
-		name: "branched nodes",
-		tree: New("alfa").AddTrees(
-			New("bravo.txt"),
-			New("charlie").AddTrees(
-				New("delta.txt"),
-				New("echo").Add("foxtrot.txt", "golf.txt"),
-			),
-		),
-		want: `alfa
-├── bravo.txt
-└── charlie
-    ├── delta.txt
-    └── echo
-        ├── foxtrot.txt
-        └── golf.txt`,
-	}, {
-		name: "intersected branched nodes",
-		tree: New("alfa").AddTrees(
-			New("bravo").Add("charlie.txt"),
-			New("delta.txt"),
-		),
-		want: `alfa
-├── bravo
-│   └── charlie.txt
-└── delta.txt`,
-	}, {
-		name: "multiline titles",
-		tree: New("alfa\n[dir]\n[3 MB]").Add(
-			"bravo.txt\n[file]\n[1 MB]",
-			"charlie.txt\n[file]\n[2 MB]",
-		),
-		want: `alfa
-[dir]
-[3 MB]
-├── bravo.txt
-│   [file]
-│   [1 MB]
-└── charlie.txt
-    [file]
-    [2 MB]`,
-	}}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := tt.tree.String()
-			assert.Equal(t, got, tt.want)
 		})
 	}
 }

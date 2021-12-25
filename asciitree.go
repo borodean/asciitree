@@ -3,7 +3,6 @@
 package asciitree
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 )
@@ -23,6 +22,11 @@ func New(title string) *Tree {
 // NewBranch creates a tree node and forces it to be recognized as a branch.
 func NewBranch(title string) *Tree {
 	return &Tree{forceBranch: true, title: title}
+}
+
+// Sprint returns the tree's visual representation.
+func Sprint(t *Tree) string {
+	return t.Title() + t.printChildren("")
 }
 
 // Add creates one or more tree nodes with the provided titles and appends them
@@ -116,11 +120,6 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 	return t
 }
 
-// String returns the tree's visual representation.
-func (t *Tree) String() string {
-	return t.Title() + t.printChildren("")
-}
-
 // Title returns the node's title.
 func (t *Tree) Title() string {
 	return t.title
@@ -143,6 +142,3 @@ func (t *Tree) printChildren(prefix string) string {
 	}
 	return out
 }
-
-// Verify that Tree implements fmt.Stringer:
-var _ fmt.Stringer = (*Tree)(nil)
