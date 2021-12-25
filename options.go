@@ -1,18 +1,18 @@
 package asciitree
 
 type SortOptions struct {
-	dirsFirst bool
+	branchesFirst bool
 }
 
 type SortOption interface {
 	apply(*SortOptions)
 }
 
-func WithDirsFirst(value bool) SortOption {
-	return dirsFirstOption(value)
+func WithBranchesFirst(value bool) SortOption {
+	return branchesFirstOption(value)
 }
 
-type dirsFirstOption bool
+type branchesFirstOption bool
 
 func newSortOptions(opts ...SortOption) SortOptions {
 	var options SortOptions
@@ -22,9 +22,9 @@ func newSortOptions(opts ...SortOption) SortOptions {
 	return options
 }
 
-func (d dirsFirstOption) apply(opts *SortOptions) {
-	opts.dirsFirst = bool(d)
+func (d branchesFirstOption) apply(opts *SortOptions) {
+	opts.branchesFirst = bool(d)
 }
 
-// Verify that dirsFirstOption implements asciitree.SortOption
-var _ SortOption = (*dirsFirstOption)(nil)
+// Verify that branchesFirstOption implements asciitree.SortOption
+var _ SortOption = (*branchesFirstOption)(nil)

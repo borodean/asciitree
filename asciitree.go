@@ -103,7 +103,7 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 	sort.SliceStable(t.children, func(i, j int) bool {
 		a := t.children[i]
 		b := t.children[j]
-		if options.dirsFirst && a.IsBranch() && !b.IsBranch() {
+		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
 			return true
 		}
 		return a.Title() < b.Title()

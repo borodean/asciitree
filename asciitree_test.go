@@ -263,7 +263,7 @@ func TestTreeSort(t *testing.T) {
 		}},
 	}, {
 		name: "directories before files",
-		give: []SortOption{WithDirsFirst(true)},
+		give: []SortOption{WithBranchesFirst(true)},
 		want: &Tree{title: "alfa", children: []*Tree{
 			{title: "bravo", children: []*Tree{
 				{title: "foxtrot", children: []*Tree{
