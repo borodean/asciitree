@@ -49,7 +49,8 @@ func (t *Tree) AddBranches(titles ...string) *Tree {
 
 // AddTrees appends the provided tree node to the node's children.
 //
-// AddTrees returns the original node for chaining.
+// Unlike NewChild and NewChildBranch, AddTrees returns the original node for
+// chaining.
 func (t *Tree) AddTrees(trees ...*Tree) *Tree {
 	for _, tree := range trees {
 		t.children = append(t.children, tree)
