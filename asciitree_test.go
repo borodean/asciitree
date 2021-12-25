@@ -76,8 +76,36 @@ func TestSprint_options(t *testing.T) {
 		give []SprintOption
 		want string
 	}{{
-		name: "default",
+		name: "none",
 		give: []SprintOption{},
+		want: `alfa
+├── charlie.txt
+├── bravo
+│   ├── golf.txt
+│   ├── foxtrot
+│   │   └── india.txt
+│   └── hotel
+├── kilo
+│   └── juliet.txt
+├── delta
+└── echo.txt`,
+	}, {
+		name: "branches first",
+		give: []SprintOption{WithBranchesFirst(true)},
+		want: `alfa
+├── bravo
+│   ├── foxtrot
+│   │   └── india.txt
+│   ├── hotel
+│   └── golf.txt
+├── kilo
+│   └── juliet.txt
+├── delta
+├── charlie.txt
+└── echo.txt`,
+	}, {
+		name: "sort by title",
+		give: []SprintOption{WithSortByTitle(true)},
 		want: `alfa
 ├── bravo
 │   ├── foxtrot
@@ -90,8 +118,8 @@ func TestSprint_options(t *testing.T) {
 └── kilo
     └── juliet.txt`,
 	}, {
-		name: "directories before files",
-		give: []SprintOption{WithBranchesFirst(true)},
+		name: "branches first + sort by title",
+		give: []SprintOption{WithBranchesFirst(true), WithSortByTitle(true)},
 		want: `alfa
 ├── bravo
 │   ├── foxtrot

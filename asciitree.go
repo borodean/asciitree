@@ -54,7 +54,10 @@ func sortChildren(t *Tree, options sprintOptions) *Tree {
 		if options.branchesFirst && a.isBranch() && !b.isBranch() {
 			return true
 		}
-		return a.Title < b.Title
+		if options.sortByTitle {
+			return a.Title < b.Title
+		}
+		return false
 	})
 	for _, child := range t.Children {
 		sortChildren(child, options)
