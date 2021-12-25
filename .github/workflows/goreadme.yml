@@ -19,4 +19,10 @@ jobs:
       - name: Update README.md according to Go Doc
         uses: posener/goreadme@v1
         with:
+          constants: true
+          factories: true
+          functions: true
+          methods: true
+          types: true
+          variabless: true
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
