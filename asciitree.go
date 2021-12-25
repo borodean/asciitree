@@ -19,22 +19,22 @@ type Node struct {
 }
 
 // Sprint returns the node's visual representation.
-func Sprint(t *Node, opts ...SprintOption) string {
+func Sprint(node *Node, opts ...SprintOption) string {
 	options := newSprintOptions(opts...)
-	sorted := sortChildren(t, options)
-	return sorted.Title + sorted.printChildren("")
+	sorted := sortChildren(node, options)
+	return sorted.Title + printChildren(sorted, "")
 }
 
-func (t *Node) isBranch() bool {
-	return t.ForceBranch || len(t.Children) > 0
+func isBranch(node *Node) bool {
+	return node.ForceBranch || len(node.Children) > 0
 }
 
-func (t *Node) printChildren(prefix string) string {
+func printChildren(node *Node, prefix string) string {
 	var out string
-	for i, child := range t.Children {
+	for i, child := range node.Children {
 		connector := "├── "
 		spacer := "│   "
-		if i == len(t.Children)-1 {
+		if i == len(node.Children)-1 {
 			connector = "└── "
 			spacer = "    "
 		}
@@ -42,18 +42,18 @@ func (t *Node) printChildren(prefix string) string {
 			prefix +
 			connector +
 			strings.ReplaceAll(child.Title, "\n", "\n"+spacer) +
-			child.printChildren(prefix+spacer)
+			printChildren(child, prefix+spacer)
 	}
 	return out
 }
 
-func sortChildren(t *Node, options sprintOptions) *Node {
-	copy := *t
+func sortChildren(node *Node, options sprintOptions) *Node {
+	copy := *node
 	copy.Children = append([]*Node(nil), copy.Children...)
 	sort.SliceStable(copy.Children, func(i, j int) bool {
 		a := copy.Children[i]
 		b := copy.Children[j]
-		if options.branchesFirst && a.isBranch() && !b.isBranch() {
+		if options.branchesFirst && isBranch(a) && !isBranch(b) {
 			return true
 		}
 		if options.sortByTitle {
