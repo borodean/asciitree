@@ -1,6 +1,6 @@
 package asciitree
 
-// SprintOption represents an option that can be provided to the Sort method.
+// SprintOption represents an option that can be provided to the Sprint method.
 type SprintOption interface {
 	apply(*sprintOptions)
 }
@@ -11,7 +11,7 @@ type sprintOptions struct {
 
 type branchesFirstOption bool
 
-// WithBranchesFirst is an option that makes the Sort method order branches
+// WithBranchesFirst is an option that makes the Sprint method print branches
 // before leaves.
 func WithBranchesFirst(value bool) SprintOption {
 	return branchesFirstOption(value)
