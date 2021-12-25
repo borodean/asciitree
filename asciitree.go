@@ -1,3 +1,5 @@
+// Package asciitree provides tools to build trees of entities and print them
+// using ASCII art.
 package asciitree
 
 import (
