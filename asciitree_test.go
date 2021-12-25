@@ -70,34 +70,6 @@ func TestSprint(t *testing.T) {
 	}
 }
 
-func TestTreeIsBranch(t *testing.T) {
-	tests := []struct {
-		name string
-		tree *Tree
-		want bool
-	}{{
-		name: "empty",
-		tree: &Tree{Title: "alfa"},
-		want: false,
-	}, {
-		name: "has children",
-		tree: &Tree{Title: "alfa", Children: []*Tree{
-			{Title: "bravo"},
-		}},
-		want: true,
-	}, {
-		name: "forced",
-		tree: &Tree{Title: "alfa", ForceBranch: true},
-		want: true,
-	}}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := tt.tree.IsBranch()
-			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
 func TestSprint_options(t *testing.T) {
 	tests := []struct {
 		name string

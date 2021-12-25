@@ -25,13 +25,7 @@ func Sprint(t *Tree, opts ...SprintOption) string {
 	return t.Title + t.printChildren("")
 }
 
-// IsBranch reports whether the node should be recognized as a branch. This is
-// possible in two cases:
-//
-// - The node has one or more children.
-// - The node was forced to be recognized as a branch by setting its ForceBranch
-// field to true.
-func (t *Tree) IsBranch() bool {
+func (t *Tree) isBranch() bool {
 	return t.ForceBranch || len(t.Children) > 0
 }
 
@@ -57,7 +51,7 @@ func sortChildren(t *Tree, options sprintOptions) *Tree {
 	sort.SliceStable(t.Children, func(i, j int) bool {
 		a := t.Children[i]
 		b := t.Children[j]
-		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
+		if options.branchesFirst && a.isBranch() && !b.isBranch() {
 			return true
 		}
 		return a.Title < b.Title
