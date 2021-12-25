@@ -3,7 +3,6 @@ package asciitree
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"gotest.tools/v3/assert"
 )
 
@@ -99,47 +98,39 @@ func TestTreeIsBranch(t *testing.T) {
 	}
 }
 
-func TestTreeSort(t *testing.T) {
+func TestSprint_options(t *testing.T) {
 	tests := []struct {
 		name string
-		give []SortOption
-		want *Tree
+		give []SprintOption
+		want string
 	}{{
 		name: "default",
-		give: []SortOption{},
-		want: &Tree{Title: "alfa", Children: []*Tree{
-			{Title: "bravo", Children: []*Tree{
-				{Title: "foxtrot", Children: []*Tree{
-					{Title: "india.txt"},
-				}},
-				{Title: "golf.txt"},
-				{Title: "hotel", ForceBranch: true},
-			}},
-			{Title: "charlie.txt"},
-			{Title: "delta", ForceBranch: true},
-			{Title: "echo.txt"},
-			{Title: "kilo", Children: []*Tree{
-				{Title: "juliet.txt"},
-			}},
-		}},
+		give: []SprintOption{},
+		want: `alfa
+├── bravo
+│   ├── foxtrot
+│   │   └── india.txt
+│   ├── golf.txt
+│   └── hotel
+├── charlie.txt
+├── delta
+├── echo.txt
+└── kilo
+    └── juliet.txt`,
 	}, {
 		name: "directories before files",
-		give: []SortOption{WithBranchesFirst(true)},
-		want: &Tree{Title: "alfa", Children: []*Tree{
-			{Title: "bravo", Children: []*Tree{
-				{Title: "foxtrot", Children: []*Tree{
-					{Title: "india.txt"},
-				}},
-				{Title: "hotel", ForceBranch: true},
-				{Title: "golf.txt"},
-			}},
-			{Title: "delta", ForceBranch: true},
-			{Title: "kilo", Children: []*Tree{
-				{Title: "juliet.txt"},
-			}},
-			{Title: "charlie.txt"},
-			{Title: "echo.txt"},
-		}},
+		give: []SprintOption{WithBranchesFirst(true)},
+		want: `alfa
+├── bravo
+│   ├── foxtrot
+│   │   └── india.txt
+│   ├── hotel
+│   └── golf.txt
+├── delta
+├── kilo
+│   └── juliet.txt
+├── charlie.txt
+└── echo.txt`,
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -158,10 +149,8 @@ func TestTreeSort(t *testing.T) {
 				{Title: "delta", ForceBranch: true},
 				{Title: "echo.txt"},
 			}}
-			got := tree.Sort(tt.give...)
-			assert.DeepEqual(t, got, tt.want, cmpOptions)
+			got := Sprint(tree, tt.give...)
+			assert.Equal(t, got, tt.want)
 		})
 	}
 }
-
-var cmpOptions = cmp.AllowUnexported(Tree{})

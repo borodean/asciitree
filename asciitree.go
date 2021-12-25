@@ -19,7 +19,9 @@ type Tree struct {
 }
 
 // Sprint returns the tree's visual representation.
-func Sprint(t *Tree) string {
+func Sprint(t *Tree, opts ...SprintOption) string {
+	options := newSprintOptions(opts...)
+	sortChildren(t, options)
 	return t.Title + t.printChildren("")
 }
 
@@ -31,25 +33,6 @@ func Sprint(t *Tree) string {
 // field to true.
 func (t *Tree) IsBranch() bool {
 	return t.ForceBranch || len(t.Children) > 0
-}
-
-// Sort recursively sorts the node's children in place.
-//
-// Sort returns the original node for chaining.
-func (t *Tree) Sort(opts ...SortOption) *Tree {
-	options := newSortOptions(opts...)
-	sort.SliceStable(t.Children, func(i, j int) bool {
-		a := t.Children[i]
-		b := t.Children[j]
-		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
-			return true
-		}
-		return a.Title < b.Title
-	})
-	for _, child := range t.Children {
-		child.Sort(opts...)
-	}
-	return t
 }
 
 func (t *Tree) printChildren(prefix string) string {
@@ -68,4 +51,19 @@ func (t *Tree) printChildren(prefix string) string {
 			child.printChildren(prefix+spacer)
 	}
 	return out
+}
+
+func sortChildren(t *Tree, options sprintOptions) *Tree {
+	sort.SliceStable(t.Children, func(i, j int) bool {
+		a := t.Children[i]
+		b := t.Children[j]
+		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
+			return true
+		}
+		return a.Title < b.Title
+	})
+	for _, child := range t.Children {
+		sortChildren(child, options)
+	}
+	return t
 }
