@@ -1,29 +1,32 @@
 package asciitree
 
-type SortOptions struct {
-	branchesFirst bool
-}
-
+// SortOption represents an option that can be provided to the Sort method.
 type SortOption interface {
-	apply(*SortOptions)
+	apply(*sortOptions)
 }
 
-func WithBranchesFirst(value bool) SortOption {
-	return branchesFirstOption(value)
+type sortOptions struct {
+	branchesFirst bool
 }
 
 type branchesFirstOption bool
 
-func newSortOptions(opts ...SortOption) SortOptions {
-	var options SortOptions
+// WithBranchesFirst is an option that makes the Sort method order branches
+// before leaves.
+func WithBranchesFirst(value bool) SortOption {
+	return branchesFirstOption(value)
+}
+
+func (d branchesFirstOption) apply(opts *sortOptions) {
+	opts.branchesFirst = bool(d)
+}
+
+func newSortOptions(opts ...SortOption) sortOptions {
+	var options sortOptions
 	for _, o := range opts {
 		o.apply(&options)
 	}
 	return options
-}
-
-func (d branchesFirstOption) apply(opts *SortOptions) {
-	opts.branchesFirst = bool(d)
 }
 
 // Verify that branchesFirstOption implements asciitree.SortOption
