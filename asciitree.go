@@ -6,37 +6,21 @@ import (
 	"strings"
 )
 
-type Tree interface {
-	fmt.Stringer
-
-	Add(...string) Tree
-	AddBranches(...string) Tree
-	AddTrees(...Tree) Tree
-	IsBranch() bool
-	NewChild(string) Tree
-	NewChildBranch(string) Tree
-	SetTitle(string) Tree
-	Sort(...SortOption) Tree
-	Title() string
-
-	printChildren(string) string
-}
-
-type tree struct {
-	children    []Tree
+type Tree struct {
+	children    []*Tree
 	forceBranch bool
 	title       string
 }
 
-func New(title string) Tree {
-	return &tree{title: title}
+func New(title string) *Tree {
+	return &Tree{title: title}
 }
 
-func NewBranch(title string) Tree {
-	return &tree{forceBranch: true, title: title}
+func NewBranch(title string) *Tree {
+	return &Tree{forceBranch: true, title: title}
 }
 
-func (t *tree) Add(titles ...string) Tree {
+func (t *Tree) Add(titles ...string) *Tree {
 	for _, title := range titles {
 		child := New(title)
 		t.children = append(t.children, child)
@@ -44,7 +28,7 @@ func (t *tree) Add(titles ...string) Tree {
 	return t
 }
 
-func (t *tree) AddBranches(titles ...string) Tree {
+func (t *Tree) AddBranches(titles ...string) *Tree {
 	for _, title := range titles {
 		child := NewBranch(title)
 		t.children = append(t.children, child)
@@ -52,35 +36,35 @@ func (t *tree) AddBranches(titles ...string) Tree {
 	return t
 }
 
-func (t *tree) AddTrees(trees ...Tree) Tree {
+func (t *Tree) AddTrees(trees ...*Tree) *Tree {
 	for _, tree := range trees {
 		t.children = append(t.children, tree)
 	}
 	return t
 }
 
-func (t *tree) IsBranch() bool {
+func (t *Tree) IsBranch() bool {
 	return t.forceBranch || len(t.children) > 0
 }
 
-func (t *tree) NewChild(title string) Tree {
+func (t *Tree) NewChild(title string) *Tree {
 	child := New(title)
 	t.children = append(t.children, child)
 	return child
 }
 
-func (t *tree) NewChildBranch(title string) Tree {
+func (t *Tree) NewChildBranch(title string) *Tree {
 	child := NewBranch(title)
 	t.children = append(t.children, child)
 	return child
 }
 
-func (t *tree) SetTitle(title string) Tree {
+func (t *Tree) SetTitle(title string) *Tree {
 	t.title = title
 	return t
 }
 
-func (t *tree) Sort(opts ...SortOption) Tree {
+func (t *Tree) Sort(opts ...SortOption) *Tree {
 	options := newSortOptions(opts...)
 	sort.SliceStable(t.children, func(i, j int) bool {
 		a := t.children[i]
@@ -96,15 +80,15 @@ func (t *tree) Sort(opts ...SortOption) Tree {
 	return t
 }
 
-func (t *tree) String() string {
+func (t *Tree) String() string {
 	return t.Title() + t.printChildren("")
 }
 
-func (t *tree) Title() string {
+func (t *Tree) Title() string {
 	return t.title
 }
 
-func (t *tree) printChildren(prefix string) string {
+func (t *Tree) printChildren(prefix string) string {
 	var out string
 	for i, child := range t.children {
 		connector := "├── "
@@ -122,5 +106,5 @@ func (t *tree) printChildren(prefix string) string {
 	return out
 }
 
-// Verify that tree implements asciitree.Tree
-var _ Tree = (*tree)(nil)
+// Verify that tree implements fmt.Stringer
+var _ fmt.Stringer = (*Tree)(nil)
