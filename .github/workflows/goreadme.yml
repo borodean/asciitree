@@ -1,0 +1,28 @@
+name: Goreadme
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  goreadme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update README.md according to Go Doc
+        uses: posener/goreadme@v1
+        with:
+          constants: true
+          factories: true
+          functions: true
+          methods: true
+          types: true
+          variabless: true
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

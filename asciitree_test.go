@@ -10,10 +10,10 @@ import (
 func TestNew(t *testing.T) {
 	tests := []struct {
 		give string
-		want Tree
+		want *Tree
 	}{
-		{"alfa", &tree{title: "alfa"}},
-		{"bravo", &tree{title: "bravo"}},
+		{"alfa", &Tree{title: "alfa"}},
+		{"bravo", &Tree{title: "bravo"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -26,10 +26,10 @@ func TestNew(t *testing.T) {
 func TestNewBranch(t *testing.T) {
 	tests := []struct {
 		give string
-		want Tree
+		want *Tree
 	}{
-		{"alfa", &tree{title: "alfa", forceBranch: true}},
-		{"bravo", &tree{title: "bravo", forceBranch: true}},
+		{"alfa", &Tree{title: "alfa", forceBranch: true}},
+		{"bravo", &Tree{title: "bravo", forceBranch: true}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -42,25 +42,25 @@ func TestNewBranch(t *testing.T) {
 func TestTreeAdd(t *testing.T) {
 	tests := []struct {
 		name string
-		tree Tree
+		tree *Tree
 		give []string
-		want Tree
+		want *Tree
 	}{{
 		name: "empty",
 		tree: New("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie"},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie"},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie"},
-			&tree{title: "delta"},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie"},
+			{title: "delta"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -74,25 +74,25 @@ func TestTreeAdd(t *testing.T) {
 func TestTreeAddBranches(t *testing.T) {
 	tests := []struct {
 		name string
-		tree Tree
+		tree *Tree
 		give []string
-		want Tree
+		want *Tree
 	}{{
 		name: "empty",
 		tree: New("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo", forceBranch: true},
-			&tree{title: "charlie", forceBranch: true},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo", forceBranch: true},
+			{title: "charlie", forceBranch: true},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie", forceBranch: true},
-			&tree{title: "delta", forceBranch: true},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie", forceBranch: true},
+			{title: "delta", forceBranch: true},
 		}},
 	}}
 	for _, tt := range tests {
@@ -106,25 +106,25 @@ func TestTreeAddBranches(t *testing.T) {
 func TestTreeAddTrees(t *testing.T) {
 	tests := []struct {
 		name string
-		tree Tree
-		give []Tree
-		want Tree
+		tree *Tree
+		give []*Tree
+		want *Tree
 	}{{
 		name: "empty",
 		tree: New("alfa"),
-		give: []Tree{New("bravo"), New("charlie")},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie"},
+		give: []*Tree{New("bravo"), New("charlie")},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie"},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
-		give: []Tree{New("charlie"), New("delta")},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie"},
-			&tree{title: "delta"},
+		give: []*Tree{New("charlie"), New("delta")},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie"},
+			{title: "delta"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -138,7 +138,7 @@ func TestTreeAddTrees(t *testing.T) {
 func TestTreeIsBranch(t *testing.T) {
 	tests := []struct {
 		name string
-		tree Tree
+		tree *Tree
 		want bool
 	}{
 		{"empty", New("alfa"), false},
@@ -156,27 +156,27 @@ func TestTreeIsBranch(t *testing.T) {
 func TestTreeNewChild(t *testing.T) {
 	tests := []struct {
 		name      string
-		tree      Tree
+		tree      *Tree
 		give      string
-		wantTree  Tree
-		wantChild Tree
+		wantTree  *Tree
+		wantChild *Tree
 	}{{
 		name: "empty",
 		tree: New("alfa"),
 		give: "bravo",
-		wantTree: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
+		wantTree: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
 		}},
-		wantChild: &tree{title: "bravo"},
+		wantChild: &Tree{title: "bravo"},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: "charlie",
-		wantTree: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie"},
+		wantTree: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie"},
 		}},
-		wantChild: &tree{title: "charlie"},
+		wantChild: &Tree{title: "charlie"},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -190,27 +190,27 @@ func TestTreeNewChild(t *testing.T) {
 func TestTreeNewChildBranch(t *testing.T) {
 	tests := []struct {
 		name      string
-		tree      Tree
+		tree      *Tree
 		give      string
-		wantTree  Tree
-		wantChild Tree
+		wantTree  *Tree
+		wantChild *Tree
 	}{{
 		name: "empty",
 		tree: New("alfa"),
 		give: "bravo",
-		wantTree: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo", forceBranch: true},
+		wantTree: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo", forceBranch: true},
 		}},
-		wantChild: &tree{title: "bravo", forceBranch: true},
+		wantChild: &Tree{title: "bravo", forceBranch: true},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: "charlie",
-		wantTree: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo"},
-			&tree{title: "charlie", forceBranch: true},
+		wantTree: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo"},
+			{title: "charlie", forceBranch: true},
 		}},
-		wantChild: &tree{title: "charlie", forceBranch: true},
+		wantChild: &Tree{title: "charlie", forceBranch: true},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -223,12 +223,12 @@ func TestTreeNewChildBranch(t *testing.T) {
 
 func TestTreeSetTitle(t *testing.T) {
 	tests := []struct {
-		tree Tree
+		tree *Tree
 		give string
-		want Tree
+		want *Tree
 	}{
-		{New("alfa"), "bravo", &tree{title: "bravo"}},
-		{New("charlie"), "delta", &tree{title: "delta"}},
+		{New("alfa"), "bravo", &Tree{title: "bravo"}},
+		{New("charlie"), "delta", &Tree{title: "delta"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -242,42 +242,42 @@ func TestTreeSort(t *testing.T) {
 	tests := []struct {
 		name string
 		give []SortOption
-		want Tree
+		want *Tree
 	}{{
 		name: "default",
 		give: []SortOption{},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo", children: []Tree{
-				&tree{title: "foxtrot", children: []Tree{
-					&tree{title: "india.txt"},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo", children: []*Tree{
+				{title: "foxtrot", children: []*Tree{
+					{title: "india.txt"},
 				}},
-				&tree{title: "golf.txt"},
-				&tree{title: "hotel", forceBranch: true},
+				{title: "golf.txt"},
+				{title: "hotel", forceBranch: true},
 			}},
-			&tree{title: "charlie.txt"},
-			&tree{title: "delta", forceBranch: true},
-			&tree{title: "echo.txt"},
-			&tree{title: "kilo", children: []Tree{
-				&tree{title: "juliet.txt"},
+			{title: "charlie.txt"},
+			{title: "delta", forceBranch: true},
+			{title: "echo.txt"},
+			{title: "kilo", children: []*Tree{
+				{title: "juliet.txt"},
 			}},
 		}},
 	}, {
 		name: "directories before files",
-		give: []SortOption{WithDirsFirst(true)},
-		want: &tree{title: "alfa", children: []Tree{
-			&tree{title: "bravo", children: []Tree{
-				&tree{title: "foxtrot", children: []Tree{
-					&tree{title: "india.txt"},
+		give: []SortOption{WithBranchesFirst(true)},
+		want: &Tree{title: "alfa", children: []*Tree{
+			{title: "bravo", children: []*Tree{
+				{title: "foxtrot", children: []*Tree{
+					{title: "india.txt"},
 				}},
-				&tree{title: "hotel", forceBranch: true},
-				&tree{title: "golf.txt"},
+				{title: "hotel", forceBranch: true},
+				{title: "golf.txt"},
 			}},
-			&tree{title: "delta", forceBranch: true},
-			&tree{title: "kilo", children: []Tree{
-				&tree{title: "juliet.txt"},
+			{title: "delta", forceBranch: true},
+			{title: "kilo", children: []*Tree{
+				{title: "juliet.txt"},
 			}},
-			&tree{title: "charlie.txt"},
-			&tree{title: "echo.txt"},
+			{title: "charlie.txt"},
+			{title: "echo.txt"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -302,7 +302,7 @@ func TestTreeSort(t *testing.T) {
 func TestTreeString(t *testing.T) {
 	tests := []struct {
 		name string
-		tree Tree
+		tree *Tree
 		want string
 	}{{
 		name: "single node",
@@ -360,7 +360,7 @@ func TestTreeString(t *testing.T) {
 
 func TestTreeTitle(t *testing.T) {
 	tests := []struct {
-		tree Tree
+		tree *Tree
 		want string
 	}{
 		{New("alfa"), "alfa"},
@@ -374,4 +374,4 @@ func TestTreeTitle(t *testing.T) {
 	}
 }
 
-var cmpOptions = cmp.AllowUnexported(tree{})
+var cmpOptions = cmp.AllowUnexported(Tree{})
