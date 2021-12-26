@@ -9,13 +9,13 @@ import (
 
 // Node represents a tree node.
 type Node struct {
-	// Children is the slice of the node's children.
-	Children []*Node
+	// Title is the title of the node.
+	Title string
 	// ForceBranch reports whether the node should be forced to be recognized as a
 	// branch.
 	ForceBranch bool
-	// Title is the title of the node.
-	Title string
+	// Children is the slice of the node's children.
+	Children []*Node
 }
 
 // Sprint returns the node's visual representation.
