@@ -105,11 +105,11 @@ func (n *Node) Sort(opts ...SortOption) *Node {
 func (n *Node) String() string {
 	var builder strings.Builder
 	builder.WriteString(n.Name)
-	n.writeChildren(&builder, "")
+	n.string(&builder, "")
 	return builder.String()
 }
 
-func (n *Node) writeChildren(builder *strings.Builder, prefix string) {
+func (n *Node) string(builder *strings.Builder, prefix string) {
 	for i, child := range n.Children {
 		connector := "├── "
 		spacer := "│   "
@@ -123,7 +123,7 @@ func (n *Node) writeChildren(builder *strings.Builder, prefix string) {
 		builder.WriteString(prefix)
 		builder.WriteString(connector)
 		builder.WriteString(strings.ReplaceAll(child.Name, "\n", nspacer))
-		child.writeChildren(builder, prefix+spacer)
+		child.string(builder, prefix+spacer)
 	}
 }
 
