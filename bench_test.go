@@ -25,3 +25,22 @@ func BenchmarkNodeString(b *testing.B) {
 		result = tree.String()
 	}
 }
+
+func BenchmarkNodeAdd(b *testing.B) {
+	trees := []*Node{
+		NewFile("bravo.txt"),
+		NewFile("charlie.txt"),
+		NewFile("delta.txt"),
+		NewFile("echo.txt"),
+		NewFile("foxtrot.txt"),
+		NewFile("golf.txt"),
+		NewFile("hotel.txt"),
+		NewFile("india.txt"),
+		NewFile("juliet.txt"),
+		NewFile("kilo.txt"),
+	}
+	for i := 0; i < b.N; i++ {
+		tree := NewDir("alfa")
+		tree.Add(trees...)
+	}
+}

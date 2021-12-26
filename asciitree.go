@@ -33,9 +33,7 @@ func NewFile(name string) *Node {
 // Unlike AddFile and AddDir, Add returns the original node for
 // chaining.
 func (n *Node) Add(nodes ...*Node) *Node {
-	for _, tree := range nodes {
-		n.Children = append(n.Children, tree)
-	}
+	n.Children = append(n.Children, nodes...)
 	return n
 }
 
