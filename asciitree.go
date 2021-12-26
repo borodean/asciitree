@@ -12,38 +12,38 @@ import (
 type Tree struct {
 	children    []*Tree
 	forceBranch bool
-	title       string
+	name        string
 }
 
 // New creates a tree node.
-func New(title string) *Tree {
-	return &Tree{title: title}
+func New(name string) *Tree {
+	return &Tree{name: name}
 }
 
 // NewBranch creates a tree node and forces it to be recognized as a branch.
-func NewBranch(title string) *Tree {
-	return &Tree{forceBranch: true, title: title}
+func NewBranch(name string) *Tree {
+	return &Tree{forceBranch: true, name: name}
 }
 
-// Add creates one or more tree nodes with the provided titles and appends them
+// Add creates one or more tree nodes with the provided names and appends them
 // to the node's children.
 //
 // Unlike NewChild, Add returns the original node for chaining.
-func (t *Tree) Add(titles ...string) *Tree {
-	for _, title := range titles {
-		child := New(title)
+func (t *Tree) Add(names ...string) *Tree {
+	for _, name := range names {
+		child := New(name)
 		t.children = append(t.children, child)
 	}
 	return t
 }
 
-// AddBranches creates one or more tree nodes with the provided titles, forces
+// AddBranches creates one or more tree nodes with the provided names, forces
 // them to be recognized as branches, and appends them to the node's children.
 //
 // Unlike NewChildBranch, AddBranches returns the original node for chaining.
-func (t *Tree) AddBranches(titles ...string) *Tree {
-	for _, title := range titles {
-		child := NewBranch(title)
+func (t *Tree) AddBranches(names ...string) *Tree {
+	for _, name := range names {
+		child := NewBranch(name)
 		t.children = append(t.children, child)
 	}
 	return t
@@ -73,8 +73,8 @@ func (t *Tree) IsBranch() bool {
 // NewChild creates a tree node and appends it to the node's children.
 //
 // Unlike Add, NewChild returns the newly created node.
-func (t *Tree) NewChild(title string) *Tree {
-	child := New(title)
+func (t *Tree) NewChild(name string) *Tree {
+	child := New(name)
 	t.children = append(t.children, child)
 	return child
 }
@@ -83,17 +83,17 @@ func (t *Tree) NewChild(title string) *Tree {
 // and appends it to the node's children.
 //
 // Unlike AddBranches, NewChildBranch returns the newly created node.
-func (t *Tree) NewChildBranch(title string) *Tree {
-	child := NewBranch(title)
+func (t *Tree) NewChildBranch(name string) *Tree {
+	child := NewBranch(name)
 	t.children = append(t.children, child)
 	return child
 }
 
-// SetTitle sets the node's title.
+// SetName sets the node's name.
 //
-// SetTitle returns the original node for chaining.
-func (t *Tree) SetTitle(title string) *Tree {
-	t.title = title
+// SetName returns the original node for chaining.
+func (t *Tree) SetName(name string) *Tree {
+	t.name = name
 	return t
 }
 
@@ -108,7 +108,7 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
 			return true
 		}
-		return a.Title() < b.Title()
+		return a.Name() < b.Name()
 	})
 	for _, child := range t.children {
 		child.Sort(opts...)
@@ -118,12 +118,12 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 
 // String returns the tree's visual representation.
 func (t *Tree) String() string {
-	return t.Title() + t.printChildren("")
+	return t.Name() + t.printChildren("")
 }
 
-// Title returns the node's title.
-func (t *Tree) Title() string {
-	return t.title
+// Name returns the node's name.
+func (t *Tree) Name() string {
+	return t.name
 }
 
 func (t *Tree) printChildren(prefix string) string {
@@ -138,7 +138,7 @@ func (t *Tree) printChildren(prefix string) string {
 		out += "\n" +
 			prefix +
 			connector +
-			strings.ReplaceAll(child.Title(), "\n", "\n"+spacer) +
+			strings.ReplaceAll(child.Name(), "\n", "\n"+spacer) +
 			child.printChildren(prefix+spacer)
 	}
 	return out

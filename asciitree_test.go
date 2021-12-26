@@ -12,8 +12,8 @@ func TestNew(t *testing.T) {
 		give string
 		want *Tree
 	}{
-		{"alfa", &Tree{title: "alfa"}},
-		{"bravo", &Tree{title: "bravo"}},
+		{"alfa", &Tree{name: "alfa"}},
+		{"bravo", &Tree{name: "bravo"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -28,8 +28,8 @@ func TestNewBranch(t *testing.T) {
 		give string
 		want *Tree
 	}{
-		{"alfa", &Tree{title: "alfa", forceBranch: true}},
-		{"bravo", &Tree{title: "bravo", forceBranch: true}},
+		{"alfa", &Tree{name: "alfa", forceBranch: true}},
+		{"bravo", &Tree{name: "bravo", forceBranch: true}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -49,18 +49,18 @@ func TestTreeAdd(t *testing.T) {
 		name: "empty",
 		tree: New("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie"},
-			{title: "delta"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
+			{name: "delta"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -81,18 +81,18 @@ func TestTreeAddBranches(t *testing.T) {
 		name: "empty",
 		tree: New("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo", forceBranch: true},
-			{title: "charlie", forceBranch: true},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo", forceBranch: true},
+			{name: "charlie", forceBranch: true},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie", forceBranch: true},
-			{title: "delta", forceBranch: true},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie", forceBranch: true},
+			{name: "delta", forceBranch: true},
 		}},
 	}}
 	for _, tt := range tests {
@@ -113,18 +113,18 @@ func TestTreeAddTrees(t *testing.T) {
 		name: "empty",
 		tree: New("alfa"),
 		give: []*Tree{New("bravo"), New("charlie")},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
 		}},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: []*Tree{New("charlie"), New("delta")},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie"},
-			{title: "delta"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
+			{name: "delta"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -153,6 +153,22 @@ func TestTreeIsBranch(t *testing.T) {
 	}
 }
 
+func TestTreeName(t *testing.T) {
+	tests := []struct {
+		tree *Tree
+		want string
+	}{
+		{New("alfa"), "alfa"},
+		{New("bravo"), "bravo"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.want, func(t *testing.T) {
+			got := tt.tree.Name()
+			assert.Equal(t, got, tt.want)
+		})
+	}
+}
+
 func TestTreeNewChild(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -164,19 +180,19 @@ func TestTreeNewChild(t *testing.T) {
 		name: "empty",
 		tree: New("alfa"),
 		give: "bravo",
-		wantTree: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
+		wantTree: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
 		}},
-		wantChild: &Tree{title: "bravo"},
+		wantChild: &Tree{name: "bravo"},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: "charlie",
-		wantTree: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie"},
+		wantTree: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
 		}},
-		wantChild: &Tree{title: "charlie"},
+		wantChild: &Tree{name: "charlie"},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -198,19 +214,19 @@ func TestTreeNewChildBranch(t *testing.T) {
 		name: "empty",
 		tree: New("alfa"),
 		give: "bravo",
-		wantTree: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo", forceBranch: true},
+		wantTree: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo", forceBranch: true},
 		}},
-		wantChild: &Tree{title: "bravo", forceBranch: true},
+		wantChild: &Tree{name: "bravo", forceBranch: true},
 	}, {
 		name: "has children",
 		tree: New("alfa").Add("bravo"),
 		give: "charlie",
-		wantTree: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo"},
-			{title: "charlie", forceBranch: true},
+		wantTree: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie", forceBranch: true},
 		}},
-		wantChild: &Tree{title: "charlie", forceBranch: true},
+		wantChild: &Tree{name: "charlie", forceBranch: true},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -221,18 +237,18 @@ func TestTreeNewChildBranch(t *testing.T) {
 	}
 }
 
-func TestTreeSetTitle(t *testing.T) {
+func TestTreeSetName(t *testing.T) {
 	tests := []struct {
 		tree *Tree
 		give string
 		want *Tree
 	}{
-		{New("alfa"), "bravo", &Tree{title: "bravo"}},
-		{New("charlie"), "delta", &Tree{title: "delta"}},
+		{New("alfa"), "bravo", &Tree{name: "bravo"}},
+		{New("charlie"), "delta", &Tree{name: "delta"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
-			got := tt.tree.SetTitle(tt.give)
+			got := tt.tree.SetName(tt.give)
 			assert.DeepEqual(t, got, tt.want, cmpOptions)
 		})
 	}
@@ -246,38 +262,38 @@ func TestTreeSort(t *testing.T) {
 	}{{
 		name: "default",
 		give: []SortOption{},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo", children: []*Tree{
-				{title: "foxtrot", children: []*Tree{
-					{title: "india.txt"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo", children: []*Tree{
+				{name: "foxtrot", children: []*Tree{
+					{name: "india.txt"},
 				}},
-				{title: "golf.txt"},
-				{title: "hotel", forceBranch: true},
+				{name: "golf.txt"},
+				{name: "hotel", forceBranch: true},
 			}},
-			{title: "charlie.txt"},
-			{title: "delta", forceBranch: true},
-			{title: "echo.txt"},
-			{title: "kilo", children: []*Tree{
-				{title: "juliet.txt"},
+			{name: "charlie.txt"},
+			{name: "delta", forceBranch: true},
+			{name: "echo.txt"},
+			{name: "kilo", children: []*Tree{
+				{name: "juliet.txt"},
 			}},
 		}},
 	}, {
 		name: "directories before files",
 		give: []SortOption{WithBranchesFirst(true)},
-		want: &Tree{title: "alfa", children: []*Tree{
-			{title: "bravo", children: []*Tree{
-				{title: "foxtrot", children: []*Tree{
-					{title: "india.txt"},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo", children: []*Tree{
+				{name: "foxtrot", children: []*Tree{
+					{name: "india.txt"},
 				}},
-				{title: "hotel", forceBranch: true},
-				{title: "golf.txt"},
+				{name: "hotel", forceBranch: true},
+				{name: "golf.txt"},
 			}},
-			{title: "delta", forceBranch: true},
-			{title: "kilo", children: []*Tree{
-				{title: "juliet.txt"},
+			{name: "delta", forceBranch: true},
+			{name: "kilo", children: []*Tree{
+				{name: "juliet.txt"},
 			}},
-			{title: "charlie.txt"},
-			{title: "echo.txt"},
+			{name: "charlie.txt"},
+			{name: "echo.txt"},
 		}},
 	}}
 	for _, tt := range tests {
@@ -335,7 +351,7 @@ func TestTreeString(t *testing.T) {
 │   └── charlie.txt
 └── delta.txt`,
 	}, {
-		name: "multiline titles",
+		name: "multiline names",
 		tree: New("alfa\n[dir]\n[3 MB]").Add(
 			"bravo.txt\n[file]\n[1 MB]",
 			"charlie.txt\n[file]\n[2 MB]",
@@ -353,22 +369,6 @@ func TestTreeString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.tree.String()
-			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
-func TestTreeTitle(t *testing.T) {
-	tests := []struct {
-		tree *Tree
-		want string
-	}{
-		{New("alfa"), "alfa"},
-		{New("bravo"), "bravo"},
-	}
-	for _, tt := range tests {
-		t.Run(tt.want, func(t *testing.T) {
-			got := tt.tree.Title()
 			assert.Equal(t, got, tt.want)
 		})
 	}
