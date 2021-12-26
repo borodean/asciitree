@@ -55,7 +55,7 @@ func TestTreeAdd(t *testing.T) {
 		}},
 	}, {
 		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
+		tree: NewFile("alfa").AddFiles("bravo"),
 		give: []*Tree{NewFile("charlie"), NewFile("delta")},
 		want: &Tree{name: "alfa", children: []*Tree{
 			{name: "bravo"},
@@ -87,7 +87,7 @@ func TestTreeAddDirs(t *testing.T) {
 		}},
 	}, {
 		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
+		tree: NewFile("alfa").AddFiles("bravo"),
 		give: []string{"charlie", "delta"},
 		want: &Tree{name: "alfa", children: []*Tree{
 			{name: "bravo"},
@@ -103,7 +103,7 @@ func TestTreeAddDirs(t *testing.T) {
 	}
 }
 
-func TestTreeAddFile(t *testing.T) {
+func TestTreeAddFiles(t *testing.T) {
 	tests := []struct {
 		name string
 		tree *Tree
@@ -119,7 +119,7 @@ func TestTreeAddFile(t *testing.T) {
 		}},
 	}, {
 		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
+		tree: NewFile("alfa").AddFiles("bravo"),
 		give: []string{"charlie", "delta"},
 		want: &Tree{name: "alfa", children: []*Tree{
 			{name: "bravo"},
@@ -129,7 +129,7 @@ func TestTreeAddFile(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := tt.tree.AddFile(tt.give...)
+			got := tt.tree.AddFiles(tt.give...)
 			assert.DeepEqual(t, got, tt.want, cmpOptions)
 		})
 	}
@@ -142,7 +142,7 @@ func TestTreeIsDir(t *testing.T) {
 		want bool
 	}{
 		{"empty", NewFile("alfa"), false},
-		{"has children", NewFile("alfa").AddFile("bravo"), true},
+		{"has children", NewFile("alfa").AddFiles("bravo"), true},
 		{"forced", NewDir("alfa"), true},
 	}
 	for _, tt := range tests {
@@ -186,7 +186,7 @@ func TestTreeNewChildDir(t *testing.T) {
 		wantChild: &Tree{name: "bravo", forceDir: true},
 	}, {
 		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
+		tree: NewFile("alfa").AddFiles("bravo"),
 		give: "charlie",
 		wantTree: &Tree{name: "alfa", children: []*Tree{
 			{name: "bravo"},
@@ -220,7 +220,7 @@ func TestTreeNewChildFile(t *testing.T) {
 		wantChild: &Tree{name: "bravo"},
 	}, {
 		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
+		tree: NewFile("alfa").AddFiles("bravo"),
 		give: "charlie",
 		wantTree: &Tree{name: "alfa", children: []*Tree{
 			{name: "bravo"},
@@ -302,10 +302,10 @@ func TestTreeSort(t *testing.T) {
 				NewFile("charlie.txt"),
 				NewFile("bravo").Add(
 					NewFile("golf.txt"),
-					NewFile("foxtrot").AddFile("india.txt"),
+					NewFile("foxtrot").AddFiles("india.txt"),
 					NewDir("hotel"),
 				),
-				NewFile("kilo").AddFile("juliet.txt"),
+				NewFile("kilo").AddFiles("juliet.txt"),
 				NewDir("delta"),
 				NewFile("echo.txt"),
 			)
@@ -330,7 +330,7 @@ func TestTreeString(t *testing.T) {
 			NewFile("bravo.txt"),
 			NewFile("charlie").Add(
 				NewFile("delta.txt"),
-				NewFile("echo").AddFile("foxtrot.txt", "golf.txt"),
+				NewFile("echo").AddFiles("foxtrot.txt", "golf.txt"),
 			),
 		),
 		want: `alfa
@@ -343,7 +343,7 @@ func TestTreeString(t *testing.T) {
 	}, {
 		name: "nested + intersected",
 		tree: NewFile("alfa").Add(
-			NewFile("bravo").AddFile("charlie.txt"),
+			NewFile("bravo").AddFiles("charlie.txt"),
 			NewFile("delta.txt"),
 		),
 		want: `alfa
@@ -352,7 +352,7 @@ func TestTreeString(t *testing.T) {
 └── delta.txt`,
 	}, {
 		name: "multiline names",
-		tree: NewFile("alfa\n[dir]\n[3 MB]").AddFile(
+		tree: NewFile("alfa\n[dir]\n[3 MB]").AddFiles(
 			"bravo.txt\n[file]\n[1 MB]",
 			"charlie.txt\n[file]\n[2 MB]",
 		),
