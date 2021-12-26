@@ -1,4 +1,4 @@
-// Package asciitree provides tools to build trees of entities and print them
+// Package asciitree provides tools to build directory trees and print them
 // using ASCII art.
 package asciitree
 
@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-// Node represents a tree node.
+// Node represents a directory tree node.
 type Node struct {
-	// Name is the name of the node.
+	// Name is the name of the file (or directory) described by the node.
 	Name string
-	// IsDir identifies whether the node is a directory.
+	// IsDir identifies whether the node describes a directory.
 	IsDir bool
 	// Children is the slice of the node's children.
 	Children []*Node
