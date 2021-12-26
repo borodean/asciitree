@@ -11,13 +11,13 @@ import (
 // Tree represents a tree node.
 type Tree struct {
 	name     string
-	forceDir bool
+	isDir    bool
 	children []*Tree
 }
 
 // NewDir creates a tree node and forces it to be recognized as a directory.
 func NewDir(name string) *Tree {
-	return &Tree{forceDir: true, name: name}
+	return &Tree{isDir: true, name: name}
 }
 
 // NewFile creates a tree node.
@@ -60,16 +60,6 @@ func (t *Tree) AddFiles(names ...string) *Tree {
 	return t
 }
 
-// IsDir reports whether the node should be recognized as a directory. This is
-// possible in two cases:
-//
-// - The node has one or more children.
-// - The node was forced to be recognized as a directory by creating it with the
-// NewDir function or the NewChildDir method.
-func (t *Tree) IsDir() bool {
-	return t.forceDir || len(t.children) > 0
-}
-
 // Name returns the node's name.
 func (t *Tree) Name() string {
 	return t.name
@@ -110,7 +100,7 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 	sort.SliceStable(t.children, func(i, j int) bool {
 		a := t.children[i]
 		b := t.children[j]
-		if options.dirsFirst && a.IsDir() && !b.IsDir() {
+		if options.dirsFirst && a.isDir && !b.isDir {
 			return true
 		}
 		return a.Name() < b.Name()
