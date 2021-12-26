@@ -74,10 +74,11 @@ func (n *Node) AddFile(name string) *Node {
 //
 // Unlike AddFile, AddFiles returns the original node for chaining.
 func (n *Node) AddFiles(names ...string) *Node {
-	for _, name := range names {
-		child := NewFile(name)
-		n.Children = append(n.Children, child)
+	nodes := make([]*Node, len(names))
+	for i, name := range names {
+		nodes[i] = NewFile(name)
 	}
+	n.Add(nodes...)
 	return n
 }
 

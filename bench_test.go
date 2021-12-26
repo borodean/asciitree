@@ -63,3 +63,22 @@ func BenchmarkAddDirs(b *testing.B) {
 		tree.AddDirs(names...)
 	}
 }
+
+func BenchmarkAddFiles(b *testing.B) {
+	names := []string{
+		"bravo.txt",
+		"charlie.txt",
+		"delta.txt",
+		"echo.txt",
+		"foxtrot.txt",
+		"golf.txt",
+		"hotel.txt",
+		"india.txt",
+		"juliet.txt",
+		"kilo.txt",
+	}
+	for i := 0; i < b.N; i++ {
+		tree := NewDir("alfa")
+		tree.AddFiles(names...)
+	}
+}
