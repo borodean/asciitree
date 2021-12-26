@@ -44,3 +44,22 @@ func BenchmarkNodeAdd(b *testing.B) {
 		tree.Add(trees...)
 	}
 }
+
+func BenchmarkAddDirs(b *testing.B) {
+	names := []string{
+		"bravo",
+		"charlie",
+		"delta",
+		"echo",
+		"foxtrot",
+		"golf",
+		"hotel",
+		"india",
+		"juliet",
+		"kilo",
+	}
+	for i := 0; i < b.N; i++ {
+		tree := NewDir("alfa")
+		tree.AddDirs(names...)
+	}
+}

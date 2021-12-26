@@ -52,10 +52,11 @@ func (n *Node) AddDir(name string) *Node {
 //
 // Unlike AddDir, AddDirs returns the original node for chaining.
 func (n *Node) AddDirs(names ...string) *Node {
-	for _, name := range names {
-		child := NewDir(name)
-		n.Children = append(n.Children, child)
+	nodes := make([]*Node, len(names))
+	for i, name := range names {
+		nodes[i] = NewDir(name)
 	}
+	n.Add(nodes...)
 	return n
 }
 
