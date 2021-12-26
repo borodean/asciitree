@@ -8,32 +8,32 @@ import (
 	"strings"
 )
 
-// Tree represents a tree node.
-type Tree struct {
+// Node represents a tree node.
+type Node struct {
 	// Name is the name of the node.
 	Name string
 	// IsDir identifies whether the node is a directory.
 	IsDir bool
 	// Children is the slice of the node's children.
-	Children []*Tree
+	Children []*Node
 }
 
 // NewDir creates a tree node and forces it to be recognized as a directory.
-func NewDir(name string) *Tree {
-	return &Tree{Name: name, IsDir: true}
+func NewDir(name string) *Node {
+	return &Node{Name: name, IsDir: true}
 }
 
 // NewFile creates a tree node.
-func NewFile(name string) *Tree {
-	return &Tree{Name: name}
+func NewFile(name string) *Node {
+	return &Node{Name: name}
 }
 
 // Add appends the provided tree nodes to the node's children.
 //
 // Unlike AddFile and AddDir, Add returns the original node for
 // chaining.
-func (t *Tree) Add(trees ...*Tree) *Tree {
-	for _, tree := range trees {
+func (t *Node) Add(nodes ...*Node) *Node {
+	for _, tree := range nodes {
 		t.Children = append(t.Children, tree)
 	}
 	return t
@@ -43,7 +43,7 @@ func (t *Tree) Add(trees ...*Tree) *Tree {
 // and appends it to the node's children.
 //
 // Unlike AddDirs, AddDir returns the newly created node.
-func (t *Tree) AddDir(name string) *Tree {
+func (t *Node) AddDir(name string) *Node {
 	child := NewDir(name)
 	t.Children = append(t.Children, child)
 	return child
@@ -53,7 +53,7 @@ func (t *Tree) AddDir(name string) *Tree {
 // to be recognized as directories, and appends them to the node's children.
 //
 // Unlike AddDir, AddDirs returns the original node for chaining.
-func (t *Tree) AddDirs(names ...string) *Tree {
+func (t *Node) AddDirs(names ...string) *Node {
 	for _, name := range names {
 		child := NewDir(name)
 		t.Children = append(t.Children, child)
@@ -64,7 +64,7 @@ func (t *Tree) AddDirs(names ...string) *Tree {
 // AddFile creates a tree node and appends it to the node's children.
 //
 // Unlike AddFiles, AddFile returns the newly created node.
-func (t *Tree) AddFile(name string) *Tree {
+func (t *Node) AddFile(name string) *Node {
 	child := NewFile(name)
 	t.Children = append(t.Children, child)
 	return child
@@ -74,7 +74,7 @@ func (t *Tree) AddFile(name string) *Tree {
 // them to the node's children.
 //
 // Unlike AddFile, AddFiles returns the original node for chaining.
-func (t *Tree) AddFiles(names ...string) *Tree {
+func (t *Node) AddFiles(names ...string) *Node {
 	for _, name := range names {
 		child := NewFile(name)
 		t.Children = append(t.Children, child)
@@ -85,7 +85,7 @@ func (t *Tree) AddFiles(names ...string) *Tree {
 // Sort recursively sorts the node's children in place.
 //
 // Sort returns the original node for chaining.
-func (t *Tree) Sort(opts ...SortOption) *Tree {
+func (t *Node) Sort(opts ...SortOption) *Node {
 	options := newSortOptions(opts...)
 	sort.SliceStable(t.Children, func(i, j int) bool {
 		a := t.Children[i]
@@ -102,11 +102,11 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 }
 
 // String returns the tree's visual representation.
-func (t *Tree) String() string {
+func (t *Node) String() string {
 	return t.Name + t.printChildren("")
 }
 
-func (t *Tree) printChildren(prefix string) string {
+func (t *Node) printChildren(prefix string) string {
 	var out string
 	for i, child := range t.Children {
 		connector := "├── "
@@ -125,4 +125,4 @@ func (t *Tree) printChildren(prefix string) string {
 }
 
 // Verify that Tree implements fmt.Stringer:
-var _ fmt.Stringer = (*Tree)(nil)
+var _ fmt.Stringer = (*Node)(nil)

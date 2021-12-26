@@ -10,10 +10,10 @@ import (
 func TestNewDir(t *testing.T) {
 	tests := []struct {
 		give string
-		want *Tree
+		want *Node
 	}{
-		{"alfa", &Tree{Name: "alfa", IsDir: true}},
-		{"bravo", &Tree{Name: "bravo", IsDir: true}},
+		{"alfa", &Node{Name: "alfa", IsDir: true}},
+		{"bravo", &Node{Name: "bravo", IsDir: true}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -26,10 +26,10 @@ func TestNewDir(t *testing.T) {
 func TestNewFile(t *testing.T) {
 	tests := []struct {
 		give string
-		want *Tree
+		want *Node
 	}{
-		{"alfa", &Tree{Name: "alfa"}},
-		{"bravo", &Tree{Name: "bravo"}},
+		{"alfa", &Node{Name: "alfa"}},
+		{"bravo", &Node{Name: "bravo"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
@@ -42,22 +42,22 @@ func TestNewFile(t *testing.T) {
 func TestTreeAdd(t *testing.T) {
 	tests := []struct {
 		name string
-		tree *Tree
-		give []*Tree
-		want *Tree
+		tree *Node
+		give []*Node
+		want *Node
 	}{{
 		name: "empty",
 		tree: NewDir("alfa"),
-		give: []*Tree{NewFile("bravo"), NewDir("charlie")},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		give: []*Node{NewFile("bravo"), NewDir("charlie")},
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie", IsDir: true},
 		}},
 	}, {
 		name: "has children",
 		tree: NewDir("alfa").AddFiles("bravo"),
-		give: []*Tree{NewFile("charlie"), NewDir("delta")},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		give: []*Node{NewFile("charlie"), NewDir("delta")},
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie"},
 			{Name: "delta", IsDir: true},
@@ -74,27 +74,27 @@ func TestTreeAdd(t *testing.T) {
 func TestTreeAddDir(t *testing.T) {
 	tests := []struct {
 		name      string
-		tree      *Tree
+		tree      *Node
 		give      string
-		wantTree  *Tree
-		wantChild *Tree
+		wantTree  *Node
+		wantChild *Node
 	}{{
 		name: "empty",
 		tree: NewDir("alfa"),
 		give: "bravo",
-		wantTree: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		wantTree: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo", IsDir: true},
 		}},
-		wantChild: &Tree{Name: "bravo", IsDir: true},
+		wantChild: &Node{Name: "bravo", IsDir: true},
 	}, {
 		name: "has children",
 		tree: NewDir("alfa").AddFiles("bravo"),
 		give: "charlie",
-		wantTree: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		wantTree: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie", IsDir: true},
 		}},
-		wantChild: &Tree{Name: "charlie", IsDir: true},
+		wantChild: &Node{Name: "charlie", IsDir: true},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -108,14 +108,14 @@ func TestTreeAddDir(t *testing.T) {
 func TestTreeAddDirs(t *testing.T) {
 	tests := []struct {
 		name string
-		tree *Tree
+		tree *Node
 		give []string
-		want *Tree
+		want *Node
 	}{{
 		name: "empty",
 		tree: NewDir("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo", IsDir: true},
 			{Name: "charlie", IsDir: true},
 		}},
@@ -123,7 +123,7 @@ func TestTreeAddDirs(t *testing.T) {
 		name: "has children",
 		tree: NewDir("alfa").AddFiles("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie", IsDir: true},
 			{Name: "delta", IsDir: true},
@@ -140,27 +140,27 @@ func TestTreeAddDirs(t *testing.T) {
 func TestTreeAddFile(t *testing.T) {
 	tests := []struct {
 		name      string
-		tree      *Tree
+		tree      *Node
 		give      string
-		wantTree  *Tree
-		wantChild *Tree
+		wantTree  *Node
+		wantChild *Node
 	}{{
 		name: "empty",
 		tree: NewDir("alfa"),
 		give: "bravo",
-		wantTree: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		wantTree: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 		}},
-		wantChild: &Tree{Name: "bravo"},
+		wantChild: &Node{Name: "bravo"},
 	}, {
 		name: "has children",
 		tree: NewDir("alfa").AddFiles("bravo"),
 		give: "charlie",
-		wantTree: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		wantTree: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie"},
 		}},
-		wantChild: &Tree{Name: "charlie"},
+		wantChild: &Node{Name: "charlie"},
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -174,14 +174,14 @@ func TestTreeAddFile(t *testing.T) {
 func TestTreeAddFiles(t *testing.T) {
 	tests := []struct {
 		name string
-		tree *Tree
+		tree *Node
 		give []string
-		want *Tree
+		want *Node
 	}{{
 		name: "empty",
 		tree: NewDir("alfa"),
 		give: []string{"bravo", "charlie"},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie"},
 		}},
@@ -189,7 +189,7 @@ func TestTreeAddFiles(t *testing.T) {
 		name: "has children",
 		tree: NewDir("alfa").AddFiles("bravo"),
 		give: []string{"charlie", "delta"},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
 			{Name: "bravo"},
 			{Name: "charlie"},
 			{Name: "delta"},
@@ -207,13 +207,13 @@ func TestTreeSort(t *testing.T) {
 	tests := []struct {
 		name string
 		give []SortOption
-		want *Tree
+		want *Node
 	}{{
 		name: "default",
 		give: []SortOption{},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
-			{Name: "bravo", IsDir: true, Children: []*Tree{
-				{Name: "foxtrot", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
+			{Name: "bravo", IsDir: true, Children: []*Node{
+				{Name: "foxtrot", IsDir: true, Children: []*Node{
 					{Name: "india.txt"},
 				}},
 				{Name: "golf.txt"},
@@ -222,23 +222,23 @@ func TestTreeSort(t *testing.T) {
 			{Name: "charlie.txt"},
 			{Name: "delta", IsDir: true},
 			{Name: "echo.txt"},
-			{Name: "kilo", IsDir: true, Children: []*Tree{
+			{Name: "kilo", IsDir: true, Children: []*Node{
 				{Name: "juliet.txt"},
 			}},
 		}},
 	}, {
 		name: "directories before files",
 		give: []SortOption{WithDirsFirst(true)},
-		want: &Tree{Name: "alfa", IsDir: true, Children: []*Tree{
-			{Name: "bravo", IsDir: true, Children: []*Tree{
-				{Name: "foxtrot", IsDir: true, Children: []*Tree{
+		want: &Node{Name: "alfa", IsDir: true, Children: []*Node{
+			{Name: "bravo", IsDir: true, Children: []*Node{
+				{Name: "foxtrot", IsDir: true, Children: []*Node{
 					{Name: "india.txt"},
 				}},
 				{Name: "hotel", IsDir: true},
 				{Name: "golf.txt"},
 			}},
 			{Name: "delta", IsDir: true},
-			{Name: "kilo", IsDir: true, Children: []*Tree{
+			{Name: "kilo", IsDir: true, Children: []*Node{
 				{Name: "juliet.txt"},
 			}},
 			{Name: "charlie.txt"},
@@ -267,7 +267,7 @@ func TestTreeSort(t *testing.T) {
 func TestTreeString(t *testing.T) {
 	tests := []struct {
 		name string
-		tree *Tree
+		tree *Node
 		want string
 	}{{
 		name: "just root",
@@ -323,4 +323,4 @@ func TestTreeString(t *testing.T) {
 	}
 }
 
-var cmpOptions = cmp.AllowUnexported(Tree{})
+var cmpOptions = cmp.AllowUnexported(Node{})
