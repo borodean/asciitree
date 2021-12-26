@@ -25,6 +25,17 @@ func NewFile(name string) *Tree {
 	return &Tree{name: name}
 }
 
+// Add appends the provided tree nodes to the node's children.
+//
+// Unlike NewChildFile and NewChildDir, Add returns the original node for
+// chaining.
+func (t *Tree) Add(trees ...*Tree) *Tree {
+	for _, tree := range trees {
+		t.children = append(t.children, tree)
+	}
+	return t
+}
+
 // AddDirs creates one or more tree nodes with the provided names, forces them
 // to be recognized as directories, and appends them to the node's children.
 //
@@ -45,17 +56,6 @@ func (t *Tree) AddFile(names ...string) *Tree {
 	for _, name := range names {
 		child := NewFile(name)
 		t.children = append(t.children, child)
-	}
-	return t
-}
-
-// AddTrees appends the provided tree nodes to the node's children.
-//
-// Unlike NewChildFile and NewChildDir, AddTrees returns the original node for
-// chaining.
-func (t *Tree) AddTrees(trees ...*Tree) *Tree {
-	for _, tree := range trees {
-		t.children = append(t.children, tree)
 	}
 	return t
 }

@@ -39,6 +39,38 @@ func TestNewFile(t *testing.T) {
 	}
 }
 
+func TestTreeAdd(t *testing.T) {
+	tests := []struct {
+		name string
+		tree *Tree
+		give []*Tree
+		want *Tree
+	}{{
+		name: "empty",
+		tree: NewFile("alfa"),
+		give: []*Tree{NewFile("bravo"), NewFile("charlie")},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
+		}},
+	}, {
+		name: "has children",
+		tree: NewFile("alfa").AddFile("bravo"),
+		give: []*Tree{NewFile("charlie"), NewFile("delta")},
+		want: &Tree{name: "alfa", children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
+			{name: "delta"},
+		}},
+	}}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.tree.Add(tt.give...)
+			assert.DeepEqual(t, got, tt.want, cmpOptions)
+		})
+	}
+}
+
 func TestTreeAddDirs(t *testing.T) {
 	tests := []struct {
 		name string
@@ -98,38 +130,6 @@ func TestTreeAddFile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.tree.AddFile(tt.give...)
-			assert.DeepEqual(t, got, tt.want, cmpOptions)
-		})
-	}
-}
-
-func TestTreeAddTrees(t *testing.T) {
-	tests := []struct {
-		name string
-		tree *Tree
-		give []*Tree
-		want *Tree
-	}{{
-		name: "empty",
-		tree: NewFile("alfa"),
-		give: []*Tree{NewFile("bravo"), NewFile("charlie")},
-		want: &Tree{name: "alfa", children: []*Tree{
-			{name: "bravo"},
-			{name: "charlie"},
-		}},
-	}, {
-		name: "has children",
-		tree: NewFile("alfa").AddFile("bravo"),
-		give: []*Tree{NewFile("charlie"), NewFile("delta")},
-		want: &Tree{name: "alfa", children: []*Tree{
-			{name: "bravo"},
-			{name: "charlie"},
-			{name: "delta"},
-		}},
-	}}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := tt.tree.AddTrees(tt.give...)
 			assert.DeepEqual(t, got, tt.want, cmpOptions)
 		})
 	}
@@ -298,9 +298,9 @@ func TestTreeSort(t *testing.T) {
 	}}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tree := NewFile("alfa").AddTrees(
+			tree := NewFile("alfa").Add(
 				NewFile("charlie.txt"),
-				NewFile("bravo").AddTrees(
+				NewFile("bravo").Add(
 					NewFile("golf.txt"),
 					NewFile("foxtrot").AddFile("india.txt"),
 					NewDir("hotel"),
@@ -326,9 +326,9 @@ func TestTreeString(t *testing.T) {
 		want: `alfa`,
 	}, {
 		name: "nested",
-		tree: NewFile("alfa").AddTrees(
+		tree: NewFile("alfa").Add(
 			NewFile("bravo.txt"),
-			NewFile("charlie").AddTrees(
+			NewFile("charlie").Add(
 				NewFile("delta.txt"),
 				NewFile("echo").AddFile("foxtrot.txt", "golf.txt"),
 			),
@@ -342,7 +342,7 @@ func TestTreeString(t *testing.T) {
         └── golf.txt`,
 	}, {
 		name: "nested + intersected",
-		tree: NewFile("alfa").AddTrees(
+		tree: NewFile("alfa").Add(
 			NewFile("bravo").AddFile("charlie.txt"),
 			NewFile("delta.txt"),
 		),
