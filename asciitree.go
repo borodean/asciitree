@@ -113,14 +113,16 @@ func (n *Node) writeChildren(builder *strings.Builder, prefix string) {
 	for i, child := range n.Children {
 		connector := "├── "
 		spacer := "│   "
+		nspacer := "\n│   "
 		if i == len(n.Children)-1 {
 			connector = "└── "
 			spacer = "    "
+			nspacer = "\n    "
 		}
 		builder.WriteString("\n")
 		builder.WriteString(prefix)
 		builder.WriteString(connector)
-		builder.WriteString(strings.ReplaceAll(child.Name, "\n", "\n"+spacer))
+		builder.WriteString(strings.ReplaceAll(child.Name, "\n", nspacer))
 		child.writeChildren(builder, prefix+spacer)
 	}
 }
