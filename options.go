@@ -1,33 +1,48 @@
 package asciitree
 
-// SortOption represents an option that can be provided to the Sort method.
-type SortOption interface {
-	apply(*sortOptions)
+// SprintOption represents an option that can be provided to the Sprint method.
+type SprintOption interface {
+	apply(*sprintOptions)
 }
 
-type sortOptions struct {
+type sprintOptions struct {
 	branchesFirst bool
+	sortByTitle   bool
 }
 
-type branchesFirstOption bool
+type (
+	branchesFirstOption bool
+	sortByTitleOption   bool
+)
 
-// WithBranchesFirst is an option that makes the Sort method order branches
+// WithBranchesFirst is an option that makes the Sprint method print branches
 // before leaves.
-func WithBranchesFirst(value bool) SortOption {
+func WithBranchesFirst(value bool) SprintOption {
 	return branchesFirstOption(value)
 }
 
-func (d branchesFirstOption) apply(opts *sortOptions) {
+// WithSortByTitle is an option that makes the Sprint method print nodes in
+// an alphanumerical order.
+func WithSortByTitle(value bool) SprintOption {
+	return sortByTitleOption(value)
+}
+
+func (d branchesFirstOption) apply(opts *sprintOptions) {
 	opts.branchesFirst = bool(d)
 }
 
-func newSortOptions(opts ...SortOption) sortOptions {
-	var options sortOptions
+func (s sortByTitleOption) apply(opts *sprintOptions) {
+	opts.sortByTitle = bool(s)
+}
+
+func newSprintOptions(opts ...SprintOption) sprintOptions {
+	var options sprintOptions
 	for _, o := range opts {
 		o.apply(&options)
 	}
 	return options
 }
 
-// Verify that branchesFirstOption implements asciitree.SortOption
-var _ SortOption = (*branchesFirstOption)(nil)
+// Verify that branchesFirstOption implements asciitree.SprintOption
+var _ SprintOption = (*branchesFirstOption)(nil)
+var _ SprintOption = (*sortByTitleOption)(nil)
