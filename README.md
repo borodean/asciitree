@@ -1,123 +1,98 @@
 # asciitree
 
-Package asciitree provides tools to build trees of entities and print them
+Package asciitree provides tools to build directory trees and print them
 using ASCII art.
 
 ## Types
 
-### type [SortOption](/options.go#L4)
+### type [Node](/asciitree.go#L12)
 
-`type SortOption interface { ... }`
+`type Node struct { ... }`
 
-SortOption represents an option that can be provided to the Sort method.
+Node represents a directory tree node.
 
-#### func [WithBranchesFirst](/options.go#L16)
+#### func [NewDir](/asciitree.go#L22)
 
-`func WithBranchesFirst(value bool) SortOption`
+`func NewDir(name string) *Node`
 
-WithBranchesFirst is an option that makes the Sort method order branches
-before leaves.
+NewDir creates a tree node and forces it to be recognized as a directory.
 
-### type [Tree](/asciitree.go#L12)
+#### func [NewFile](/asciitree.go#L27)
 
-`type Tree struct { ... }`
+`func NewFile(name string) *Node`
 
-Tree represents a tree node.
+NewFile creates a tree node.
 
-#### func [New](/asciitree.go#L19)
+#### func (*Node) [Add](/asciitree.go#L35)
 
-`func New(title string) *Tree`
+`func (t *Node) Add(nodes ...*Node) *Node`
 
-New creates a tree node.
+Add appends the provided tree nodes to the node's children.
 
-#### func [NewBranch](/asciitree.go#L24)
-
-`func NewBranch(title string) *Tree`
-
-NewBranch creates a tree node and forces it to be recognized as a branch.
-
-#### func (*Tree) [Add](/asciitree.go#L32)
-
-`func (t *Tree) Add(titles ...string) *Tree`
-
-Add creates one or more tree nodes with the provided titles and appends them
-to the node's children.
-
-Unlike NewChild, Add returns the original node for chaining.
-
-#### func (*Tree) [AddBranches](/asciitree.go#L44)
-
-`func (t *Tree) AddBranches(titles ...string) *Tree`
-
-AddBranches creates one or more tree nodes with the provided titles, forces
-them to be recognized as branches, and appends them to the node's children.
-
-Unlike NewChildBranch, AddBranches returns the original node for chaining.
-
-#### func (*Tree) [AddTrees](/asciitree.go#L56)
-
-`func (t *Tree) AddTrees(trees ...*Tree) *Tree`
-
-AddTrees appends the provided tree nodes to the node's children.
-
-Unlike NewChild and NewChildBranch, AddTrees returns the original node for
+Unlike AddFile and AddDir, Add returns the original node for
 chaining.
 
-#### func (*Tree) [IsBranch](/asciitree.go#L69)
+#### func (*Node) [AddDir](/asciitree.go#L46)
 
-`func (t *Tree) IsBranch() bool`
+`func (t *Node) AddDir(name string) *Node`
 
-IsBranch reports whether the node should be recognized as a branch. This is
-possible in two cases:
-
-- The node has one or more children.
-- The node was forced to be recognized as a branch by creating it with the
-NewBranch function or the NewChildBranch method.
-
-#### func (*Tree) [NewChild](/asciitree.go#L76)
-
-`func (t *Tree) NewChild(title string) *Tree`
-
-NewChild creates a tree node and appends it to the node's children.
-
-Unlike Add, NewChild returns the newly created node.
-
-#### func (*Tree) [NewChildBranch](/asciitree.go#L86)
-
-`func (t *Tree) NewChildBranch(title string) *Tree`
-
-NewChildBranch creates a tree node, forces it to be recognized as a branch,
+AddDir creates a tree node, forces it to be recognized as a directory,
 and appends it to the node's children.
 
-Unlike AddBranches, NewChildBranch returns the newly created node.
+Unlike AddDirs, AddDir returns the newly created node.
 
-#### func (*Tree) [SetTitle](/asciitree.go#L95)
+#### func (*Node) [AddDirs](/asciitree.go#L56)
 
-`func (t *Tree) SetTitle(title string) *Tree`
+`func (t *Node) AddDirs(names ...string) *Node`
 
-SetTitle sets the node's title.
+AddDirs creates one or more tree nodes with the provided names, forces them
+to be recognized as directories, and appends them to the node's children.
 
-SetTitle returns the original node for chaining.
+Unlike AddDir, AddDirs returns the original node for chaining.
 
-#### func (*Tree) [Sort](/asciitree.go#L103)
+#### func (*Node) [AddFile](/asciitree.go#L67)
 
-`func (t *Tree) Sort(opts ...SortOption) *Tree`
+`func (t *Node) AddFile(name string) *Node`
+
+AddFile creates a tree node and appends it to the node's children.
+
+Unlike AddFiles, AddFile returns the newly created node.
+
+#### func (*Node) [AddFiles](/asciitree.go#L77)
+
+`func (t *Node) AddFiles(names ...string) *Node`
+
+AddFiles creates one or more tree nodes with the provided names and appends
+them to the node's children.
+
+Unlike AddFile, AddFiles returns the original node for chaining.
+
+#### func (*Node) [Sort](/asciitree.go#L88)
+
+`func (t *Node) Sort(opts ...SortOption) *Node`
 
 Sort recursively sorts the node's children in place.
 
 Sort returns the original node for chaining.
 
-#### func (*Tree) [String](/asciitree.go#L120)
+#### func (*Node) [String](/asciitree.go#L105)
 
-`func (t *Tree) String() string`
+`func (t *Node) String() string`
 
 String returns the tree's visual representation.
 
-#### func (*Tree) [Title](/asciitree.go#L125)
+### type [SortOption](/options.go#L8)
 
-`func (t *Tree) Title() string`
+`type SortOption interface { ... }`
 
-Title returns the node's title.
+SortOption represents an option that can be provided to the Sort method.
+
+#### func [WithDirsFirst](/options.go#L20)
+
+`func WithDirsFirst(value bool) SortOption`
+
+WithDirsFirst is an option that makes the Sort method order directories
+before leaves.
 
 ---
 Readme created from Go doc with [goreadme](https://github.com/posener/goreadme)
