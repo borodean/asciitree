@@ -25,42 +25,42 @@ NewFile creates a tree node.
 
 #### func (*Node) [Add](/asciitree.go#L35)
 
-`func (t *Node) Add(nodes ...*Node) *Node`
+`func (n *Node) Add(nodes ...*Node) *Node`
 
 Add appends the provided tree nodes to the node's children.
 
 Unlike AddFile and AddDir, Add returns the original node for
 chaining.
 
-#### func (*Node) [AddDir](/asciitree.go#L46)
+#### func (*Node) [AddDir](/asciitree.go#L44)
 
-`func (t *Node) AddDir(name string) *Node`
+`func (n *Node) AddDir(name string) *Node`
 
 AddDir creates a tree node, forces it to be recognized as a directory,
 and appends it to the node's children.
 
 Unlike AddDirs, AddDir returns the newly created node.
 
-#### func (*Node) [AddDirs](/asciitree.go#L56)
+#### func (*Node) [AddDirs](/asciitree.go#L54)
 
-`func (t *Node) AddDirs(names ...string) *Node`
+`func (n *Node) AddDirs(names ...string) *Node`
 
 AddDirs creates one or more tree nodes with the provided names, forces them
 to be recognized as directories, and appends them to the node's children.
 
 Unlike AddDir, AddDirs returns the original node for chaining.
 
-#### func (*Node) [AddFile](/asciitree.go#L67)
+#### func (*Node) [AddFile](/asciitree.go#L66)
 
-`func (t *Node) AddFile(name string) *Node`
+`func (n *Node) AddFile(name string) *Node`
 
 AddFile creates a tree node and appends it to the node's children.
 
 Unlike AddFiles, AddFile returns the newly created node.
 
-#### func (*Node) [AddFiles](/asciitree.go#L77)
+#### func (*Node) [AddFiles](/asciitree.go#L76)
 
-`func (t *Node) AddFiles(names ...string) *Node`
+`func (n *Node) AddFiles(names ...string) *Node`
 
 AddFiles creates one or more tree nodes with the provided names and appends
 them to the node's children.
@@ -69,15 +69,15 @@ Unlike AddFile, AddFiles returns the original node for chaining.
 
 #### func (*Node) [Sort](/asciitree.go#L88)
 
-`func (t *Node) Sort(opts ...SortOption) *Node`
+`func (n *Node) Sort(opts ...SortOption) *Node`
 
 Sort recursively sorts the node's children in place.
 
 Sort returns the original node for chaining.
 
-#### func (*Node) [String](/asciitree.go#L105)
+#### func (*Node) [String](/asciitree.go#L94)
 
-`func (t *Node) String() string`
+`func (n *Node) String() string`
 
 String returns the tree's visual representation.
 
