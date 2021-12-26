@@ -133,5 +133,5 @@ func (n *Node) string(builder *strings.Builder, prefix string) {
 	}
 }
 
-// Verify that Tree implements fmt.Stringer:
+// Verify that Node implements fmt.Stringer:
 var _ fmt.Stringer = (*Node)(nil)
