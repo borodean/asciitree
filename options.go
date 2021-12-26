@@ -1,24 +1,24 @@
 package asciitree
 
+type sortOptions struct {
+	dirsFirst bool
+}
+
 // SortOption represents an option that can be provided to the Sort method.
 type SortOption interface {
 	apply(*sortOptions)
 }
 
-type sortOptions struct {
-	branchesFirst bool
+type dirsFirstOption bool
+
+func (d dirsFirstOption) apply(opts *sortOptions) {
+	opts.dirsFirst = bool(d)
 }
 
-type branchesFirstOption bool
-
-// WithBranchesFirst is an option that makes the Sort method order branches
+// WithDirsFirst is an option that makes the Sort method order directories
 // before leaves.
-func WithBranchesFirst(value bool) SortOption {
-	return branchesFirstOption(value)
-}
-
-func (d branchesFirstOption) apply(opts *sortOptions) {
-	opts.branchesFirst = bool(d)
+func WithDirsFirst(value bool) SortOption {
+	return dirsFirstOption(value)
 }
 
 func newSortOptions(opts ...SortOption) sortOptions {
@@ -29,5 +29,5 @@ func newSortOptions(opts ...SortOption) sortOptions {
 	return options
 }
 
-// Verify that branchesFirstOption implements asciitree.SortOption
-var _ SortOption = (*branchesFirstOption)(nil)
+// Verify that dirsFirstOption implements asciitree.SortOption
+var _ SortOption = (*dirsFirstOption)(nil)

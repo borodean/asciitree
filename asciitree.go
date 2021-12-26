@@ -1,4 +1,4 @@
-// Package asciitree provides tools to build trees of entities and print them
+// Package asciitree provides tools to build directory trees and print them
 // using ASCII art.
 package asciitree
 
@@ -8,141 +8,121 @@ import (
 	"strings"
 )
 
-// Tree represents a tree node.
-type Tree struct {
-	children    []*Tree
-	forceBranch bool
-	title       string
+// Node represents a directory tree node.
+type Node struct {
+	// Name is the name of the file (or directory) described by the node.
+	Name string
+	// IsDir identifies whether the node describes a directory.
+	IsDir bool
+	// Children is the slice of the node's children.
+	Children []*Node
 }
 
-// New creates a tree node.
-func New(title string) *Tree {
-	return &Tree{title: title}
+// NewDir creates a tree node and forces it to be recognized as a directory.
+func NewDir(name string) *Node {
+	return &Node{Name: name, IsDir: true}
 }
 
-// NewBranch creates a tree node and forces it to be recognized as a branch.
-func NewBranch(title string) *Tree {
-	return &Tree{forceBranch: true, title: title}
+// NewFile creates a tree node.
+func NewFile(name string) *Node {
+	return &Node{Name: name}
 }
 
-// Add creates one or more tree nodes with the provided titles and appends them
-// to the node's children.
+// Add appends the provided tree nodes to the node's children.
 //
-// Unlike NewChild, Add returns the original node for chaining.
-func (t *Tree) Add(titles ...string) *Tree {
-	for _, title := range titles {
-		child := New(title)
-		t.children = append(t.children, child)
-	}
-	return t
-}
-
-// AddBranches creates one or more tree nodes with the provided titles, forces
-// them to be recognized as branches, and appends them to the node's children.
-//
-// Unlike NewChildBranch, AddBranches returns the original node for chaining.
-func (t *Tree) AddBranches(titles ...string) *Tree {
-	for _, title := range titles {
-		child := NewBranch(title)
-		t.children = append(t.children, child)
-	}
-	return t
-}
-
-// AddTrees appends the provided tree nodes to the node's children.
-//
-// Unlike NewChild and NewChildBranch, AddTrees returns the original node for
+// Unlike AddFile and AddDir, Add returns the original node for
 // chaining.
-func (t *Tree) AddTrees(trees ...*Tree) *Tree {
-	for _, tree := range trees {
-		t.children = append(t.children, tree)
+func (t *Node) Add(nodes ...*Node) *Node {
+	for _, tree := range nodes {
+		t.Children = append(t.Children, tree)
 	}
 	return t
 }
 
-// IsBranch reports whether the node should be recognized as a branch. This is
-// possible in two cases:
-//
-// - The node has one or more children.
-// - The node was forced to be recognized as a branch by creating it with the
-// NewBranch function or the NewChildBranch method.
-func (t *Tree) IsBranch() bool {
-	return t.forceBranch || len(t.children) > 0
-}
-
-// NewChild creates a tree node and appends it to the node's children.
-//
-// Unlike Add, NewChild returns the newly created node.
-func (t *Tree) NewChild(title string) *Tree {
-	child := New(title)
-	t.children = append(t.children, child)
-	return child
-}
-
-// NewChildBranch creates a tree node, forces it to be recognized as a branch,
+// AddDir creates a tree node, forces it to be recognized as a directory,
 // and appends it to the node's children.
 //
-// Unlike AddBranches, NewChildBranch returns the newly created node.
-func (t *Tree) NewChildBranch(title string) *Tree {
-	child := NewBranch(title)
-	t.children = append(t.children, child)
+// Unlike AddDirs, AddDir returns the newly created node.
+func (t *Node) AddDir(name string) *Node {
+	child := NewDir(name)
+	t.Children = append(t.Children, child)
 	return child
 }
 
-// SetTitle sets the node's title.
+// AddDirs creates one or more tree nodes with the provided names, forces them
+// to be recognized as directories, and appends them to the node's children.
 //
-// SetTitle returns the original node for chaining.
-func (t *Tree) SetTitle(title string) *Tree {
-	t.title = title
+// Unlike AddDir, AddDirs returns the original node for chaining.
+func (t *Node) AddDirs(names ...string) *Node {
+	for _, name := range names {
+		child := NewDir(name)
+		t.Children = append(t.Children, child)
+	}
+	return t
+}
+
+// AddFile creates a tree node and appends it to the node's children.
+//
+// Unlike AddFiles, AddFile returns the newly created node.
+func (t *Node) AddFile(name string) *Node {
+	child := NewFile(name)
+	t.Children = append(t.Children, child)
+	return child
+}
+
+// AddFiles creates one or more tree nodes with the provided names and appends
+// them to the node's children.
+//
+// Unlike AddFile, AddFiles returns the original node for chaining.
+func (t *Node) AddFiles(names ...string) *Node {
+	for _, name := range names {
+		child := NewFile(name)
+		t.Children = append(t.Children, child)
+	}
 	return t
 }
 
 // Sort recursively sorts the node's children in place.
 //
 // Sort returns the original node for chaining.
-func (t *Tree) Sort(opts ...SortOption) *Tree {
+func (t *Node) Sort(opts ...SortOption) *Node {
 	options := newSortOptions(opts...)
-	sort.SliceStable(t.children, func(i, j int) bool {
-		a := t.children[i]
-		b := t.children[j]
-		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
+	sort.SliceStable(t.Children, func(i, j int) bool {
+		a := t.Children[i]
+		b := t.Children[j]
+		if options.dirsFirst && a.IsDir && !b.IsDir {
 			return true
 		}
-		return a.Title() < b.Title()
+		return a.Name < b.Name
 	})
-	for _, child := range t.children {
+	for _, child := range t.Children {
 		child.Sort(opts...)
 	}
 	return t
 }
 
 // String returns the tree's visual representation.
-func (t *Tree) String() string {
-	return t.Title() + t.printChildren("")
+func (t *Node) String() string {
+	return t.Name + t.printChildren("")
 }
 
-// Title returns the node's title.
-func (t *Tree) Title() string {
-	return t.title
-}
-
-func (t *Tree) printChildren(prefix string) string {
+func (t *Node) printChildren(prefix string) string {
 	var out string
-	for i, child := range t.children {
+	for i, child := range t.Children {
 		connector := "├── "
 		spacer := "│   "
-		if i == len(t.children)-1 {
+		if i == len(t.Children)-1 {
 			connector = "└── "
 			spacer = "    "
 		}
 		out += "\n" +
 			prefix +
 			connector +
-			strings.ReplaceAll(child.Title(), "\n", "\n"+spacer) +
+			strings.ReplaceAll(child.Name, "\n", "\n"+spacer) +
 			child.printChildren(prefix+spacer)
 	}
 	return out
 }
 
 // Verify that Tree implements fmt.Stringer:
-var _ fmt.Stringer = (*Tree)(nil)
+var _ fmt.Stringer = (*Node)(nil)
