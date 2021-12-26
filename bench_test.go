@@ -4,7 +4,7 @@ import "testing"
 
 var result string
 
-func BenchmarkNodeAdd(b *testing.B) {
+func BenchmarkNode_Add(b *testing.B) {
 	trees := []*Node{
 		NewFile("bravo.txt"),
 		NewFile("charlie.txt"),
@@ -23,7 +23,7 @@ func BenchmarkNodeAdd(b *testing.B) {
 	}
 }
 
-func BenchmarkAddDirs(b *testing.B) {
+func BenchmarkNode_AddDirs(b *testing.B) {
 	names := []string{
 		"bravo",
 		"charlie",
@@ -42,7 +42,7 @@ func BenchmarkAddDirs(b *testing.B) {
 	}
 }
 
-func BenchmarkAddFiles(b *testing.B) {
+func BenchmarkNode_AddFiles(b *testing.B) {
 	names := []string{
 		"bravo.txt",
 		"charlie.txt",
@@ -61,7 +61,7 @@ func BenchmarkAddFiles(b *testing.B) {
 	}
 }
 
-func BenchmarkNodeSort(b *testing.B) {
+func BenchmarkNode_Sort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		tree := NewDir("juliet").Add(
 			NewFile("golf.txt"),
@@ -83,7 +83,7 @@ func BenchmarkNodeSort(b *testing.B) {
 	}
 }
 
-func BenchmarkNodeString(b *testing.B) {
+func BenchmarkNode_String(b *testing.B) {
 	tree := NewDir("alfa").Add(
 		NewFile("bravo.txt"),
 		NewDir("charlie").Add(

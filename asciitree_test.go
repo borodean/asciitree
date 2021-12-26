@@ -39,7 +39,7 @@ func TestNewFile(t *testing.T) {
 	}
 }
 
-func TestNodeAdd(t *testing.T) {
+func TestNode_Add(t *testing.T) {
 	tests := []struct {
 		name string
 		tree *Node
@@ -71,7 +71,7 @@ func TestNodeAdd(t *testing.T) {
 	}
 }
 
-func TestNodeAddDir(t *testing.T) {
+func TestNode_AddDir(t *testing.T) {
 	tests := []struct {
 		name      string
 		tree      *Node
@@ -105,7 +105,7 @@ func TestNodeAddDir(t *testing.T) {
 	}
 }
 
-func TestNodeAddDirs(t *testing.T) {
+func TestNode_AddDirs(t *testing.T) {
 	tests := []struct {
 		name string
 		tree *Node
@@ -137,7 +137,7 @@ func TestNodeAddDirs(t *testing.T) {
 	}
 }
 
-func TestNodeAddFile(t *testing.T) {
+func TestNode_AddFile(t *testing.T) {
 	tests := []struct {
 		name      string
 		tree      *Node
@@ -171,7 +171,7 @@ func TestNodeAddFile(t *testing.T) {
 	}
 }
 
-func TestNodeAddFiles(t *testing.T) {
+func TestNode_AddFiles(t *testing.T) {
 	tests := []struct {
 		name string
 		tree *Node
@@ -203,7 +203,7 @@ func TestNodeAddFiles(t *testing.T) {
 	}
 }
 
-func TestNodeSort(t *testing.T) {
+func TestNode_Sort(t *testing.T) {
 	tests := []struct {
 		name string
 		give []SortOption
@@ -264,7 +264,7 @@ func TestNodeSort(t *testing.T) {
 	}
 }
 
-func TestNodeString(t *testing.T) {
+func TestNode_String(t *testing.T) {
 	tests := []struct {
 		name string
 		tree *Node
