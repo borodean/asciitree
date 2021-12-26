@@ -10,9 +10,9 @@ import (
 
 // Tree represents a tree node.
 type Tree struct {
-	children    []*Tree
-	forceBranch bool
 	name        string
+	forceBranch bool
+	children    []*Tree
 }
 
 // New creates a tree node.
