@@ -15,26 +15,14 @@ type Tree struct {
 	children []*Tree
 }
 
-// New creates a tree node.
-func New(name string) *Tree {
-	return &Tree{name: name}
-}
-
 // NewDir creates a tree node and forces it to be recognized as a directory.
 func NewDir(name string) *Tree {
 	return &Tree{forceDir: true, name: name}
 }
 
-// Add creates one or more tree nodes with the provided names and appends them
-// to the node's children.
-//
-// Unlike NewChild, Add returns the original node for chaining.
-func (t *Tree) Add(names ...string) *Tree {
-	for _, name := range names {
-		child := New(name)
-		t.children = append(t.children, child)
-	}
-	return t
+// NewFile creates a tree node.
+func NewFile(name string) *Tree {
+	return &Tree{name: name}
 }
 
 // AddDirs creates one or more tree nodes with the provided names, forces them
@@ -49,9 +37,21 @@ func (t *Tree) AddDirs(names ...string) *Tree {
 	return t
 }
 
+// AddFile creates one or more tree nodes with the provided names and appends
+// them to the node's children.
+//
+// Unlike NewChildFile, AddFile returns the original node for chaining.
+func (t *Tree) AddFile(names ...string) *Tree {
+	for _, name := range names {
+		child := NewFile(name)
+		t.children = append(t.children, child)
+	}
+	return t
+}
+
 // AddTrees appends the provided tree nodes to the node's children.
 //
-// Unlike NewChild and NewChildDir, AddTrees returns the original node for
+// Unlike NewChildFile and NewChildDir, AddTrees returns the original node for
 // chaining.
 func (t *Tree) AddTrees(trees ...*Tree) *Tree {
 	for _, tree := range trees {
@@ -70,13 +70,9 @@ func (t *Tree) IsDir() bool {
 	return t.forceDir || len(t.children) > 0
 }
 
-// NewChild creates a tree node and appends it to the node's children.
-//
-// Unlike Add, NewChild returns the newly created node.
-func (t *Tree) NewChild(name string) *Tree {
-	child := New(name)
-	t.children = append(t.children, child)
-	return child
+// Name returns the node's name.
+func (t *Tree) Name() string {
+	return t.name
 }
 
 // NewChildDir creates a tree node, forces it to be recognized as a directory,
@@ -85,6 +81,15 @@ func (t *Tree) NewChild(name string) *Tree {
 // Unlike AddDirs, NewChildDir returns the newly created node.
 func (t *Tree) NewChildDir(name string) *Tree {
 	child := NewDir(name)
+	t.children = append(t.children, child)
+	return child
+}
+
+// NewChildFile creates a tree node and appends it to the node's children.
+//
+// Unlike AddFile, NewChildFile returns the newly created node.
+func (t *Tree) NewChildFile(name string) *Tree {
+	child := NewFile(name)
 	t.children = append(t.children, child)
 	return child
 }
@@ -119,11 +124,6 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 // String returns the tree's visual representation.
 func (t *Tree) String() string {
 	return t.Name() + t.printChildren("")
-}
-
-// Name returns the node's name.
-func (t *Tree) Name() string {
-	return t.name
 }
 
 func (t *Tree) printChildren(prefix string) string {
