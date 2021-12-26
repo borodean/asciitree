@@ -71,6 +71,40 @@ func TestTreeAdd(t *testing.T) {
 	}
 }
 
+func TestTreeAddDir(t *testing.T) {
+	tests := []struct {
+		name      string
+		tree      *Tree
+		give      string
+		wantTree  *Tree
+		wantChild *Tree
+	}{{
+		name: "empty",
+		tree: NewDir("alfa"),
+		give: "bravo",
+		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
+			{name: "bravo", isDir: true},
+		}},
+		wantChild: &Tree{name: "bravo", isDir: true},
+	}, {
+		name: "has children",
+		tree: NewDir("alfa").AddFiles("bravo"),
+		give: "charlie",
+		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie", isDir: true},
+		}},
+		wantChild: &Tree{name: "charlie", isDir: true},
+	}}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotChild := tt.tree.AddDir(tt.give)
+			assert.DeepEqual(t, tt.tree, tt.wantTree, cmpOptions)
+			assert.DeepEqual(t, gotChild, tt.wantChild, cmpOptions)
+		})
+	}
+}
+
 func TestTreeAddDirs(t *testing.T) {
 	tests := []struct {
 		name string
@@ -99,6 +133,40 @@ func TestTreeAddDirs(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.tree.AddDirs(tt.give...)
 			assert.DeepEqual(t, got, tt.want, cmpOptions)
+		})
+	}
+}
+
+func TestTreeAddFile(t *testing.T) {
+	tests := []struct {
+		name      string
+		tree      *Tree
+		give      string
+		wantTree  *Tree
+		wantChild *Tree
+	}{{
+		name: "empty",
+		tree: NewDir("alfa"),
+		give: "bravo",
+		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
+			{name: "bravo"},
+		}},
+		wantChild: &Tree{name: "bravo"},
+	}, {
+		name: "has children",
+		tree: NewDir("alfa").AddFiles("bravo"),
+		give: "charlie",
+		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
+			{name: "bravo"},
+			{name: "charlie"},
+		}},
+		wantChild: &Tree{name: "charlie"},
+	}}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotChild := tt.tree.AddFile(tt.give)
+			assert.DeepEqual(t, tt.tree, tt.wantTree, cmpOptions)
+			assert.DeepEqual(t, gotChild, tt.wantChild, cmpOptions)
 		})
 	}
 }
@@ -147,74 +215,6 @@ func TestTreeName(t *testing.T) {
 		t.Run(tt.want, func(t *testing.T) {
 			got := tt.tree.Name()
 			assert.Equal(t, got, tt.want)
-		})
-	}
-}
-
-func TestTreeNewChildDir(t *testing.T) {
-	tests := []struct {
-		name      string
-		tree      *Tree
-		give      string
-		wantTree  *Tree
-		wantChild *Tree
-	}{{
-		name: "empty",
-		tree: NewDir("alfa"),
-		give: "bravo",
-		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
-			{name: "bravo", isDir: true},
-		}},
-		wantChild: &Tree{name: "bravo", isDir: true},
-	}, {
-		name: "has children",
-		tree: NewDir("alfa").AddFiles("bravo"),
-		give: "charlie",
-		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
-			{name: "bravo"},
-			{name: "charlie", isDir: true},
-		}},
-		wantChild: &Tree{name: "charlie", isDir: true},
-	}}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			gotChild := tt.tree.NewChildDir(tt.give)
-			assert.DeepEqual(t, tt.tree, tt.wantTree, cmpOptions)
-			assert.DeepEqual(t, gotChild, tt.wantChild, cmpOptions)
-		})
-	}
-}
-
-func TestTreeNewChildFile(t *testing.T) {
-	tests := []struct {
-		name      string
-		tree      *Tree
-		give      string
-		wantTree  *Tree
-		wantChild *Tree
-	}{{
-		name: "empty",
-		tree: NewDir("alfa"),
-		give: "bravo",
-		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
-			{name: "bravo"},
-		}},
-		wantChild: &Tree{name: "bravo"},
-	}, {
-		name: "has children",
-		tree: NewDir("alfa").AddFiles("bravo"),
-		give: "charlie",
-		wantTree: &Tree{name: "alfa", isDir: true, children: []*Tree{
-			{name: "bravo"},
-			{name: "charlie"},
-		}},
-		wantChild: &Tree{name: "charlie"},
-	}}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			gotChild := tt.tree.NewChildFile(tt.give)
-			assert.DeepEqual(t, tt.tree, tt.wantTree, cmpOptions)
-			assert.DeepEqual(t, gotChild, tt.wantChild, cmpOptions)
 		})
 	}
 }

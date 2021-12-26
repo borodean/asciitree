@@ -27,7 +27,7 @@ func NewFile(name string) *Tree {
 
 // Add appends the provided tree nodes to the node's children.
 //
-// Unlike NewChildFile and NewChildDir, Add returns the original node for
+// Unlike AddFile and AddDir, Add returns the original node for
 // chaining.
 func (t *Tree) Add(trees ...*Tree) *Tree {
 	for _, tree := range trees {
@@ -36,10 +36,20 @@ func (t *Tree) Add(trees ...*Tree) *Tree {
 	return t
 }
 
+// AddDir creates a tree node, forces it to be recognized as a directory,
+// and appends it to the node's children.
+//
+// Unlike AddDirs, AddDir returns the newly created node.
+func (t *Tree) AddDir(name string) *Tree {
+	child := NewDir(name)
+	t.children = append(t.children, child)
+	return child
+}
+
 // AddDirs creates one or more tree nodes with the provided names, forces them
 // to be recognized as directories, and appends them to the node's children.
 //
-// Unlike NewChildDir, AddDirs returns the original node for chaining.
+// Unlike AddDir, AddDirs returns the original node for chaining.
 func (t *Tree) AddDirs(names ...string) *Tree {
 	for _, name := range names {
 		child := NewDir(name)
@@ -48,10 +58,19 @@ func (t *Tree) AddDirs(names ...string) *Tree {
 	return t
 }
 
+// AddFile creates a tree node and appends it to the node's children.
+//
+// Unlike AddFiles, AddFile returns the newly created node.
+func (t *Tree) AddFile(name string) *Tree {
+	child := NewFile(name)
+	t.children = append(t.children, child)
+	return child
+}
+
 // AddFiles creates one or more tree nodes with the provided names and appends
 // them to the node's children.
 //
-// Unlike NewChildFile, AddFiles returns the original node for chaining.
+// Unlike AddFile, AddFiles returns the original node for chaining.
 func (t *Tree) AddFiles(names ...string) *Tree {
 	for _, name := range names {
 		child := NewFile(name)
@@ -63,25 +82,6 @@ func (t *Tree) AddFiles(names ...string) *Tree {
 // Name returns the node's name.
 func (t *Tree) Name() string {
 	return t.name
-}
-
-// NewChildDir creates a tree node, forces it to be recognized as a directory,
-// and appends it to the node's children.
-//
-// Unlike AddDirs, NewChildDir returns the newly created node.
-func (t *Tree) NewChildDir(name string) *Tree {
-	child := NewDir(name)
-	t.children = append(t.children, child)
-	return child
-}
-
-// NewChildFile creates a tree node and appends it to the node's children.
-//
-// Unlike AddFiles, NewChildFile returns the newly created node.
-func (t *Tree) NewChildFile(name string) *Tree {
-	child := NewFile(name)
-	t.children = append(t.children, child)
-	return child
 }
 
 // SetName sets the node's name.
