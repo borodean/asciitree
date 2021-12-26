@@ -103,11 +103,13 @@ func (t *Node) Sort(opts ...SortOption) *Node {
 
 // String returns the tree's visual representation.
 func (t *Node) String() string {
-	return t.Name + t.printChildren("")
+	var builder strings.Builder
+	builder.WriteString(t.Name)
+	t.writeChildren(&builder, "")
+	return builder.String()
 }
 
-func (t *Node) printChildren(prefix string) string {
-	var out string
+func (t *Node) writeChildren(builder *strings.Builder, prefix string) {
 	for i, child := range t.Children {
 		connector := "├── "
 		spacer := "│   "
@@ -115,13 +117,12 @@ func (t *Node) printChildren(prefix string) string {
 			connector = "└── "
 			spacer = "    "
 		}
-		out += "\n" +
-			prefix +
-			connector +
-			strings.ReplaceAll(child.Name, "\n", "\n"+spacer) +
-			child.printChildren(prefix+spacer)
+		builder.WriteString("\n")
+		builder.WriteString(prefix)
+		builder.WriteString(connector)
+		builder.WriteString(strings.ReplaceAll(child.Name, "\n", "\n"+spacer))
+		child.writeChildren(builder, prefix+spacer)
 	}
-	return out
 }
 
 // Verify that Tree implements fmt.Stringer:
