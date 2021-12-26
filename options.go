@@ -6,19 +6,19 @@ type SortOption interface {
 }
 
 type sortOptions struct {
-	branchesFirst bool
+	dirsFirst bool
 }
 
-type branchesFirstOption bool
+type dirsFirstOption bool
 
-// WithBranchesFirst is an option that makes the Sort method order branches
+// WithDirsFirst is an option that makes the Sort method order directories
 // before leaves.
-func WithBranchesFirst(value bool) SortOption {
-	return branchesFirstOption(value)
+func WithDirsFirst(value bool) SortOption {
+	return dirsFirstOption(value)
 }
 
-func (d branchesFirstOption) apply(opts *sortOptions) {
-	opts.branchesFirst = bool(d)
+func (d dirsFirstOption) apply(opts *sortOptions) {
+	opts.dirsFirst = bool(d)
 }
 
 func newSortOptions(opts ...SortOption) sortOptions {
@@ -29,5 +29,5 @@ func newSortOptions(opts ...SortOption) sortOptions {
 	return options
 }
 
-// Verify that branchesFirstOption implements asciitree.SortOption
-var _ SortOption = (*branchesFirstOption)(nil)
+// Verify that dirsFirstOption implements asciitree.SortOption
+var _ SortOption = (*dirsFirstOption)(nil)

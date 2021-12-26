@@ -10,9 +10,9 @@ import (
 
 // Tree represents a tree node.
 type Tree struct {
-	name        string
-	forceBranch bool
-	children    []*Tree
+	name     string
+	forceDir bool
+	children []*Tree
 }
 
 // New creates a tree node.
@@ -20,9 +20,9 @@ func New(name string) *Tree {
 	return &Tree{name: name}
 }
 
-// NewBranch creates a tree node and forces it to be recognized as a branch.
-func NewBranch(name string) *Tree {
-	return &Tree{forceBranch: true, name: name}
+// NewDir creates a tree node and forces it to be recognized as a directory.
+func NewDir(name string) *Tree {
+	return &Tree{forceDir: true, name: name}
 }
 
 // Add creates one or more tree nodes with the provided names and appends them
@@ -37,13 +37,13 @@ func (t *Tree) Add(names ...string) *Tree {
 	return t
 }
 
-// AddBranches creates one or more tree nodes with the provided names, forces
-// them to be recognized as branches, and appends them to the node's children.
+// AddDirs creates one or more tree nodes with the provided names, forces them
+// to be recognized as directories, and appends them to the node's children.
 //
-// Unlike NewChildBranch, AddBranches returns the original node for chaining.
-func (t *Tree) AddBranches(names ...string) *Tree {
+// Unlike NewChildDir, AddDirs returns the original node for chaining.
+func (t *Tree) AddDirs(names ...string) *Tree {
 	for _, name := range names {
-		child := NewBranch(name)
+		child := NewDir(name)
 		t.children = append(t.children, child)
 	}
 	return t
@@ -51,7 +51,7 @@ func (t *Tree) AddBranches(names ...string) *Tree {
 
 // AddTrees appends the provided tree nodes to the node's children.
 //
-// Unlike NewChild and NewChildBranch, AddTrees returns the original node for
+// Unlike NewChild and NewChildDir, AddTrees returns the original node for
 // chaining.
 func (t *Tree) AddTrees(trees ...*Tree) *Tree {
 	for _, tree := range trees {
@@ -60,14 +60,14 @@ func (t *Tree) AddTrees(trees ...*Tree) *Tree {
 	return t
 }
 
-// IsBranch reports whether the node should be recognized as a branch. This is
+// IsDir reports whether the node should be recognized as a directory. This is
 // possible in two cases:
 //
 // - The node has one or more children.
-// - The node was forced to be recognized as a branch by creating it with the
-// NewBranch function or the NewChildBranch method.
-func (t *Tree) IsBranch() bool {
-	return t.forceBranch || len(t.children) > 0
+// - The node was forced to be recognized as a directory by creating it with the
+// NewDir function or the NewChildDir method.
+func (t *Tree) IsDir() bool {
+	return t.forceDir || len(t.children) > 0
 }
 
 // NewChild creates a tree node and appends it to the node's children.
@@ -79,12 +79,12 @@ func (t *Tree) NewChild(name string) *Tree {
 	return child
 }
 
-// NewChildBranch creates a tree node, forces it to be recognized as a branch,
+// NewChildDir creates a tree node, forces it to be recognized as a directory,
 // and appends it to the node's children.
 //
-// Unlike AddBranches, NewChildBranch returns the newly created node.
-func (t *Tree) NewChildBranch(name string) *Tree {
-	child := NewBranch(name)
+// Unlike AddDirs, NewChildDir returns the newly created node.
+func (t *Tree) NewChildDir(name string) *Tree {
+	child := NewDir(name)
 	t.children = append(t.children, child)
 	return child
 }
@@ -105,7 +105,7 @@ func (t *Tree) Sort(opts ...SortOption) *Tree {
 	sort.SliceStable(t.children, func(i, j int) bool {
 		a := t.children[i]
 		b := t.children[j]
-		if options.branchesFirst && a.IsBranch() && !b.IsBranch() {
+		if options.dirsFirst && a.IsDir() && !b.IsDir() {
 			return true
 		}
 		return a.Name() < b.Name()
