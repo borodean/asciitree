@@ -86,18 +86,7 @@ func (n *Node) AddFiles(names ...string) *Node {
 //
 // Sort returns the original node for chaining.
 func (n *Node) Sort(opts ...SortOption) *Node {
-	options := newSortOptions(opts...)
-	sort.SliceStable(n.Children, func(i, j int) bool {
-		a := n.Children[i]
-		b := n.Children[j]
-		if options.dirsFirst && a.IsDir && !b.IsDir {
-			return true
-		}
-		return a.Name < b.Name
-	})
-	for _, child := range n.Children {
-		child.Sort(opts...)
-	}
+	n.sort(newSortOptions(opts...))
 	return n
 }
 
@@ -107,6 +96,23 @@ func (n *Node) String() string {
 	builder.WriteString(n.Name)
 	n.string(&builder, "")
 	return builder.String()
+}
+
+func (n *Node) sort(options sortOptions) {
+	if len(n.Children) == 0 {
+		return
+	}
+	sort.SliceStable(n.Children, func(i, j int) bool {
+		a := n.Children[i]
+		b := n.Children[j]
+		if options.dirsFirst && a.IsDir && !b.IsDir {
+			return true
+		}
+		return a.Name < b.Name
+	})
+	for _, child := range n.Children {
+		child.sort(options)
+	}
 }
 
 func (n *Node) string(builder *strings.Builder, prefix string) {
