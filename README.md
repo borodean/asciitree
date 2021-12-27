@@ -15,13 +15,13 @@ go get github.com/borodean/asciitree
 ## Usage
 
 ```go
-tree := NewDir("albums").Add(
-  NewFile("ONUKA.jpg"),
-  NewDir("VIDLIK").AddFiles(
+tree := asciitree.NewDir("albums").Add(
+  asciitree.NewFile("ONUKA.jpg"),
+  asciitree.NewDir("VIDLIK").AddFiles(
     "Svitanok.mp3",
     "Vidlik.mp3",
   ),
-  NewDir("KOLIR").AddFiles(
+  asciitree.NewDir("KOLIR").AddFiles(
     "CEAHC.mp3",
     "ZENIT.mp3",
     "UYAVY (feat. DakhaBrakha).mp3",
@@ -31,7 +31,7 @@ tree := NewDir("albums").Add(
 
 // Sort the tree's descendants alphanumerically while placing directories
 // before files:
-tree.Sort(WithDirsFirst(true))
+tree.Sort(asciitree.WithDirsFirst(true))
 
 // Print an ASCII art representation of the directory tree:
 fmt.Println(tree)
