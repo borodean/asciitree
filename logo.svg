@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="347" height="48">
+  <g font-family="monospace" font-size="16">
+    <text y="12">░█▀█░█▀▀░█▀▀░▀█▀░▀█▀░▀█▀░█▀▄░█▀▀░█▀▀</text>
+    <text y="28">░█▀█░▀▀█░█░░░░█░░░█░░░█░░█▀▄░█▀▀░█▀▀</text>
+    <text y="44">░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░▀▀▀</text>
+    <animate attributeName="fill" dur="10s" repeatCount="indefinite" values="#A0F;#0AF;#AF0;#FA0;#F0A;#A0F"/>
+  </g>
+</svg>
