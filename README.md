@@ -22,25 +22,23 @@ go get github.com/borodean/asciitree
 ## Usage
 
 ```go
-func main() {
-  tree := NewDir("albums").Add(
-    NewFile("ONUKA.jpg"),
-    NewDir("VIDLIK").AddFiles(
-      "Svitanok.mp3",
-      "Vidlik.mp3",
-      "Other (Intro).mp3",
-      "Other.mp3",
-      "19 86.mp3",
-    ),
-  )
+tree := NewDir("albums").Add(
+  NewFile("ONUKA.jpg"),
+  NewDir("VIDLIK").AddFiles(
+    "Svitanok.mp3",
+    "Vidlik.mp3",
+    "Other (Intro).mp3",
+    "Other.mp3",
+    "19 86.mp3",
+  ),
+)
 
-  // Sort the tree's descendants alphanumerically while placing directories
-  // before files:
-  tree.Sort(WithDirsFirst(true))
+// Sort the tree's descendants alphanumerically while placing directories
+// before files:
+tree.Sort(WithDirsFirst(true))
 
-  // Print an ASCII art representation of the directory tree:
-  fmt.Println(tree)
-}
+// Print an ASCII art representation of the directory tree:
+fmt.Println(tree)
 ```
 
 ## License
