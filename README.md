@@ -15,6 +15,7 @@ go get github.com/borodean/asciitree
 ## Usage
 
 ```go
+// Build a directory tree representation:
 tree := asciitree.NewDir("albums").Add(
   asciitree.NewFile("ONUKA.jpg"),
   asciitree.NewDir("VIDLIK").AddFiles(
