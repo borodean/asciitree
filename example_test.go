@@ -1,24 +1,28 @@
-package asciitree
+package asciitree_test
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/borodean/asciitree"
+)
 
 func ExampleNewDir() {
-	dir := NewDir("albums")
+	dir := asciitree.NewDir("albums")
 	fmt.Printf("%#v", dir)
 	// Output:
 	// &asciitree.Node{Name:"albums", IsDir:true, Children:[]*asciitree.Node(nil)}
 }
 
 func ExampleNewFile() {
-	file := NewFile("ONUKA.jpg")
+	file := asciitree.NewFile("ONUKA.jpg")
 	fmt.Printf("%#v", file)
 	// Output:
 	// &asciitree.Node{Name:"ONUKA.jpg", IsDir:false, Children:[]*asciitree.Node(nil)}
 }
 
 func ExampleNode_Add() {
-	tree := NewDir("albums")
-	tree.Add(NewDir("VIDLIK"), NewFile("ONUKA.jpg"), NewFile(".DS_Store"))
+	tree := asciitree.NewDir("albums")
+	tree.Add(asciitree.NewDir("VIDLIK"), asciitree.NewFile("ONUKA.jpg"), asciitree.NewFile(".DS_Store"))
 	fmt.Println(tree)
 	// Output:
 	// albums
@@ -28,7 +32,7 @@ func ExampleNode_Add() {
 }
 
 func ExampleNode_AddDir() {
-	tree := NewDir("albums")
+	tree := asciitree.NewDir("albums")
 	dir := tree.AddDir("VIDLIK")
 	fmt.Println(tree)
 	fmt.Println("--")
@@ -41,7 +45,7 @@ func ExampleNode_AddDir() {
 }
 
 func ExampleNode_AddDirs() {
-	tree := NewDir("albums")
+	tree := asciitree.NewDir("albums")
 	tree.AddDirs("VIDLIK", "KOLIR")
 	fmt.Println(tree)
 	// Output:
@@ -51,7 +55,7 @@ func ExampleNode_AddDirs() {
 }
 
 func ExampleNode_AddFile() {
-	tree := NewDir("albums")
+	tree := asciitree.NewDir("albums")
 	file := tree.AddDir("ONUKA.jpg")
 	fmt.Println(tree)
 	fmt.Println("--")
@@ -64,7 +68,7 @@ func ExampleNode_AddFile() {
 }
 
 func ExampleNode_AddFiles() {
-	tree := NewDir("albums")
+	tree := asciitree.NewDir("albums")
 	tree.AddFiles(".DS_Store", "ONUKA.jpg")
 	fmt.Println(tree)
 	// Output:
@@ -74,17 +78,17 @@ func ExampleNode_AddFiles() {
 }
 
 func ExampleNode_Sort() {
-	tree := NewDir("albums").Add(
-		NewFile(".DS_Store"),
-		NewFile("ONUKA.jpg"),
-		NewDir("VIDLIK").AddFiles(
+	tree := asciitree.NewDir("albums").Add(
+		asciitree.NewFile(".DS_Store"),
+		asciitree.NewFile("ONUKA.jpg"),
+		asciitree.NewDir("VIDLIK").AddFiles(
 			"Svitanok.mp3",
 			"Vidlik.mp3",
 			"Other (Intro).mp3",
 			"Other.mp3",
 			"19 86.mp3",
 		),
-		NewDir("KOLIR").AddFiles(
+		asciitree.NewDir("KOLIR").AddFiles(
 			"VSTUP.mp3",
 			"CEAHC.mp3",
 			"ZENIT.mp3",
@@ -123,17 +127,17 @@ func ExampleNode_Sort() {
 
 // To place directories before files, enable the WithDirsFirst option.
 func ExampleNode_Sort_withDirsFirst() {
-	tree := NewDir("albums").Add(
-		NewFile(".DS_Store"),
-		NewFile("ONUKA.jpg"),
-		NewDir("VIDLIK").AddFiles(
+	tree := asciitree.NewDir("albums").Add(
+		asciitree.NewFile(".DS_Store"),
+		asciitree.NewFile("ONUKA.jpg"),
+		asciitree.NewDir("VIDLIK").AddFiles(
 			"Svitanok.mp3",
 			"Vidlik.mp3",
 			"Other (Intro).mp3",
 			"Other.mp3",
 			"19 86.mp3",
 		),
-		NewDir("KOLIR").AddFiles(
+		asciitree.NewDir("KOLIR").AddFiles(
 			"VSTUP.mp3",
 			"CEAHC.mp3",
 			"ZENIT.mp3",
@@ -146,7 +150,7 @@ func ExampleNode_Sort_withDirsFirst() {
 			"23: 42.mp3",
 		),
 	)
-	fmt.Println(tree.Sort(WithDirsFirst(true)))
+	fmt.Println(tree.Sort(asciitree.WithDirsFirst(true)))
 	// Output:
 	// albums
 	// ├── KOLIR
@@ -171,17 +175,17 @@ func ExampleNode_Sort_withDirsFirst() {
 }
 
 func ExampleNode_String() {
-	tree := NewDir("albums").Add(
-		NewFile(".DS_Store"),
-		NewFile("ONUKA.jpg"),
-		NewDir("VIDLIK").AddFiles(
+	tree := asciitree.NewDir("albums").Add(
+		asciitree.NewFile(".DS_Store"),
+		asciitree.NewFile("ONUKA.jpg"),
+		asciitree.NewDir("VIDLIK").AddFiles(
 			"Svitanok.mp3",
 			"Vidlik.mp3",
 			"Other (Intro).mp3",
 			"Other.mp3",
 			"19 86.mp3",
 		),
-		NewDir("KOLIR").AddFiles(
+		asciitree.NewDir("KOLIR").AddFiles(
 			"VSTUP.mp3",
 			"CEAHC.mp3",
 			"ZENIT.mp3",
