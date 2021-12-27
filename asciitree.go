@@ -73,8 +73,8 @@ func (n *Node) AddFiles(names ...string) *Node {
 	return n
 }
 
-// Sort recursively sorts the node's children alphanumerically and returns the
-// current node.
+// Sort recursively sorts the node's descendants alphanumerically and returns
+// the current node.
 func (n *Node) Sort(opts ...SortOption) *Node {
 	n.sort(newSortOptions(opts...))
 	return n

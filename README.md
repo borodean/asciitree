@@ -4,8 +4,7 @@
 
 # ![asciitree][asciitree-logo]
 
-Package asciitree provides tools to build directory trees and print them
-using ASCII art.
+Human-friendly Go module that builds and prints directory trees using ASCII art.
 
 [go-reference-badge]: https://pkg.go.dev/badge/github.com/borodean/asciitree.svg
 [go-reference]: https://pkg.go.dev/github.com/borodean/asciitree
@@ -13,3 +12,37 @@ using ASCII art.
 [codacy-dashboard]: https://www.codacy.com/gh/borodean/asciitree/dashboard
 [codacy-coverage-badge]: https://app.codacy.com/project/badge/Coverage/c5ef187cb0fa41f4ad4fa4f635cc8cd6
 [asciitree-logo]: ./logo.svg
+
+## Installation
+
+```bash
+go get github.com/borodean/asciitree
+```
+
+## Usage
+
+```go
+func main() {
+  tree := NewDir("albums").Add(
+    NewFile("ONUKA.jpg"),
+    NewDir("VIDLIK").AddFiles(
+      "Svitanok.mp3",
+      "Vidlik.mp3",
+      "Other (Intro).mp3",
+      "Other.mp3",
+      "19 86.mp3",
+    ),
+  )
+
+  // Sort the tree's descendants alphanumerically while placing directories
+  // before files:
+  tree.Sort(WithDirsFirst(true))
+
+  // Print an ASCII art representation of the directory tree:
+  fmt.Println(tree)
+}
+```
+
+## License
+
+MIT.

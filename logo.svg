@@ -1,8 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="347" height="48">
-  <g font-family="monospace" font-size="16">
-    <text y="12">░█▀█░█▀▀░█▀▀░▀█▀░▀█▀░▀█▀░█▀▄░█▀▀░█▀▀</text>
-    <text y="28">░█▀█░▀▀█░█░░░░█░░░█░░░█░░█▀▄░█▀▀░█▀▀</text>
-    <text y="44">░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░▀▀▀</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="387" height="250">
+  <path d="M15.1 0H372c5 0 6.5 0 8.7.7 2.6 1 4.7 3 5.7 5.7.7 2.2.7 3.6.7 8.7V235c0 5 0 6.5-.7 8.7-1 2.6-3 4.7-5.7 5.7-2.2.7-3.6.7-8.7.7H15c-5 0-6.5 0-8.7-.7-2.6-1-4.7-3-5.7-5.7C0 241.4 0 240 0 235V15c0-5 0-6.5.7-8.7 1-2.6 3-4.7 5.7-5.7C8.6 0 10 0 15 0Z" fill="#262626"/>
+  <g>
     <animate attributeName="fill" dur="10s" repeatCount="indefinite" values="#A0F;#0AF;#AF0;#FA0;#F0A;#A0F"/>
+    <g font-family="monospace" font-size="16">
+      <text x="20" y="32">░█▀█░█▀▀░█▀▀░▀█▀░▀█▀░▀█▀░█▀▄░█▀▀░█▀▀</text>
+      <text x="20" y="48">░█▀█░▀▀█░█░░░░█░░░█░░░█░░█▀▄░█▀▀░█▀▀</text>
+      <text x="20" y="64">░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀▀▀░▀▀▀</text>
+    </g>
+    <g font-family="SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace" font-size="13.6" opacity=".7">
+      <text x="20" y="91">├── KOLIR</text>
+      <text x="20" y="108">│   ├── CEAHC.mp3</text>
+      <text x="20" y="125">│   ├── UYAVY (feat. DakhaBrakha).mp3</text>
+      <text x="20" y="142">│   ├── XASHI.mp3</text>
+      <text x="20" y="159">│   └── ZENIT.mp3</text>
+      <text x="20" y="176">├── VIDLIK</text>
+      <text x="20" y="193">│   ├── Svitanok.mp3</text>
+      <text x="20" y="210">│   └── Vidlik.mp3</text>
+      <text x="20" y="227">└── ONUKA.jpg</text>
+    </g>
   </g>
 </svg>
+
