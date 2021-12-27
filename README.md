@@ -23,18 +23,18 @@ go get github.com/borodean/asciitree
 
 ```go
 tree := NewDir("albums").Add(
-    NewFile("ONUKA.jpg"),
-    NewDir("VIDLIK").AddFiles(
-      "Svitanok.mp3",
-      "Vidlik.mp3",
-    ),
-    NewDir("KOLIR").AddFiles(
-      "CEAHC.mp3",
-      "ZENIT.mp3",
-      "UYAVY (feat. DakhaBrakha).mp3",
-      "XASHI.mp3",
-    ),
-  )
+  NewFile("ONUKA.jpg"),
+  NewDir("VIDLIK").AddFiles(
+    "Svitanok.mp3",
+    "Vidlik.mp3",
+  ),
+  NewDir("KOLIR").AddFiles(
+    "CEAHC.mp3",
+    "ZENIT.mp3",
+    "UYAVY (feat. DakhaBrakha).mp3",
+    "XASHI.mp3",
+  ),
+)
 
 // Sort the tree's descendants alphanumerically while placing directories
 // before files:
