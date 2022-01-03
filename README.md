@@ -1,6 +1,6 @@
 [![Go Reference][go-reference-badge]][go-reference]
 [![Codacy Quality][codacy-quality-badge]][codacy-dashboard]
-[![Codacy Coverage][codacy-coverage-badge]][codacy-dashboard]
+[![Codecov Coverage][codecov-coverage-badge]][codecov-coverage]
 
 # ![asciitree][asciitree-logo]
 
@@ -46,5 +46,6 @@ MIT.
 [go-reference]: https://pkg.go.dev/github.com/borodean/asciitree
 [codacy-quality-badge]: https://app.codacy.com/project/badge/Grade/c5ef187cb0fa41f4ad4fa4f635cc8cd6
 [codacy-dashboard]: https://www.codacy.com/gh/borodean/asciitree/dashboard
-[codacy-coverage-badge]: https://app.codacy.com/project/badge/Coverage/c5ef187cb0fa41f4ad4fa4f635cc8cd6
+[codecov-coverage-badge]: https://codecov.io/gh/borodean/asciitree/branch/main/graph/badge.svg?token=UNHXM8TZJ4
+[codecov-coverage]: https://codecov.io/gh/borodean/asciitree
 [asciitree-logo]: ./logo.svg
