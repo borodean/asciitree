@@ -14,9 +14,10 @@ jobs:
         go: ["1.17", "1.16"]
     name: Go v${{ matrix.go }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Set up Go
+      - name: Set up Go environment
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
@@ -24,9 +25,7 @@ jobs:
       - name: Test
         run: make test-ci
 
-      - name: Submit coverage report to Codacy
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            --force-coverage-parser go -r coverage.out
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          files: coverage.out
