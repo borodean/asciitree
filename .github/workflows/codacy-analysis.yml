@@ -1,0 +1,25 @@
+name: Codacy Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  codacy-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@4.0.0
+        with:
+          output: results.sarif
+          format: sarif
+          gh-code-scanning-compat: true
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
