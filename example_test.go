@@ -1,3 +1,4 @@
+//nolint:lll // Outputs need to present themselves as-is.
 package asciitree_test
 
 import (

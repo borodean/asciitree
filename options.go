@@ -16,7 +16,7 @@ func (d dirsFirstOption) apply(opts *sortOptions) {
 }
 
 // WithDirsFirst configures the Sort method to place directories before files.
-func WithDirsFirst(value bool) SortOption {
+func WithDirsFirst(value bool) SortOption { //nolint:ireturn // Uber Go idiom
 	return dirsFirstOption(value)
 }
 
@@ -25,8 +25,9 @@ func newSortOptions(opts ...SortOption) sortOptions {
 	for _, o := range opts {
 		o.apply(&options)
 	}
+
 	return options
 }
 
-// Verify that dirsFirstOption implements asciitree.SortOption:
+// Verify that dirsFirstOption implements asciitree.SortOption.
 var _ SortOption = (*dirsFirstOption)(nil)

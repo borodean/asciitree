@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// Node describes a directory tree node. It can be either a directory or a file,
-// depending on the IsDir value.
+// Node describes a directory tree node. It can be either a directory or a
+// file, depending on the IsDir value.
 type Node struct {
 	// Name is the name of the directory or file described by the node.
 	Name string
@@ -35,11 +35,12 @@ func (n *Node) Add(nodes ...*Node) *Node {
 	return n
 }
 
-// AddDir creates a directory node under the current node and returns the newly
-// created node.
+// AddDir creates a directory node under the current node and returns the
+// newly created node.
 func (n *Node) AddDir(name string) *Node {
 	child := NewDir(name)
 	n.Children = append(n.Children, child)
+
 	return child
 }
 
@@ -50,8 +51,8 @@ func (n *Node) AddDirs(names ...string) *Node {
 	for i, name := range names {
 		nodes[i] = NewDir(name)
 	}
-	n.Add(nodes...)
-	return n
+
+	return n.Add(nodes...)
 }
 
 // AddFile creates a file node under the current node and returns the newly
@@ -59,6 +60,7 @@ func (n *Node) AddDirs(names ...string) *Node {
 func (n *Node) AddFile(name string) *Node {
 	child := NewFile(name)
 	n.Children = append(n.Children, child)
+
 	return child
 }
 
@@ -69,8 +71,8 @@ func (n *Node) AddFiles(names ...string) *Node {
 	for i, name := range names {
 		nodes[i] = NewFile(name)
 	}
-	n.Add(nodes...)
-	return n
+
+	return n.Add(nodes...)
 }
 
 // Sort recursively sorts the node's descendants alphanumerically and returns
@@ -84,8 +86,10 @@ func (n *Node) Sort(opts ...SortOption) *Node {
 // by the current node and its descendants.
 func (n *Node) String() string {
 	var builder strings.Builder
+
 	builder.WriteString(n.Name)
 	n.string(&builder, "")
+
 	return builder.String()
 }
 
@@ -93,6 +97,7 @@ func (n *Node) sort(options sortOptions) {
 	if len(n.Children) == 0 {
 		return
 	}
+
 	sort.SliceStable(n.Children, func(i, j int) bool {
 		a := n.Children[i]
 		b := n.Children[j]
@@ -101,6 +106,7 @@ func (n *Node) sort(options sortOptions) {
 		}
 		return a.Name < b.Name
 	})
+
 	for _, child := range n.Children {
 		child.sort(options)
 	}
@@ -111,11 +117,13 @@ func (n *Node) string(builder *strings.Builder, prefix string) {
 		connector := "├── "
 		spacer := "│   "
 		nspacer := "\n│   "
+
 		if i == len(n.Children)-1 {
 			connector = "└── "
 			spacer = "    "
 			nspacer = "\n    "
 		}
+
 		builder.WriteString("\n")
 		builder.WriteString(prefix)
 		builder.WriteString(connector)
@@ -124,5 +132,5 @@ func (n *Node) string(builder *strings.Builder, prefix string) {
 	}
 }
 
-// Verify that Node implements fmt.Stringer:
+// Verify that Node implements fmt.Stringer.
 var _ fmt.Stringer = (*Node)(nil)

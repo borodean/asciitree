@@ -1,24 +1,29 @@
-package asciitree
+package asciitree_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/borodean/asciitree"
+)
 
 var result string
 
 func BenchmarkNode_Add(b *testing.B) {
-	trees := []*Node{
-		NewFile("bravo.txt"),
-		NewFile("charlie.txt"),
-		NewFile("delta.txt"),
-		NewFile("echo.txt"),
-		NewFile("foxtrot.txt"),
-		NewFile("golf.txt"),
-		NewFile("hotel.txt"),
-		NewFile("india.txt"),
-		NewFile("juliet.txt"),
-		NewFile("kilo.txt"),
+	trees := []*asciitree.Node{
+		asciitree.NewFile("bravo.txt"),
+		asciitree.NewFile("charlie.txt"),
+		asciitree.NewFile("delta.txt"),
+		asciitree.NewFile("echo.txt"),
+		asciitree.NewFile("foxtrot.txt"),
+		asciitree.NewFile("golf.txt"),
+		asciitree.NewFile("hotel.txt"),
+		asciitree.NewFile("india.txt"),
+		asciitree.NewFile("juliet.txt"),
+		asciitree.NewFile("kilo.txt"),
 	}
+
 	for i := 0; i < b.N; i++ {
-		tree := NewDir("alfa")
+		tree := asciitree.NewDir("alfa")
 		tree.Add(trees...)
 	}
 }
@@ -36,8 +41,9 @@ func BenchmarkNode_AddDirs(b *testing.B) {
 		"juliet",
 		"kilo",
 	}
+
 	for i := 0; i < b.N; i++ {
-		tree := NewDir("alfa")
+		tree := asciitree.NewDir("alfa")
 		tree.AddDirs(names...)
 	}
 }
@@ -55,50 +61,51 @@ func BenchmarkNode_AddFiles(b *testing.B) {
 		"juliet.txt",
 		"kilo.txt",
 	}
+
 	for i := 0; i < b.N; i++ {
-		tree := NewDir("alfa")
+		tree := asciitree.NewDir("alfa")
 		tree.AddFiles(names...)
 	}
 }
 
 func BenchmarkNode_Sort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		tree := NewDir("juliet").Add(
-			NewFile("golf.txt"),
-			NewDir("foxtrot").Add(
-				NewFile("charlie.txt"),
-				NewDir("mike").AddFiles("lima.txt"),
-				NewDir("india").Add(
-					NewDir("delta\n[dir]\n[3 MB]").AddFiles(
+		tree := asciitree.NewDir("juliet").Add(
+			asciitree.NewFile("golf.txt"),
+			asciitree.NewDir("foxtrot").Add(
+				asciitree.NewFile("charlie.txt"),
+				asciitree.NewDir("mike").AddFiles("lima.txt"),
+				asciitree.NewDir("india").Add(
+					asciitree.NewDir("delta\n[dir]\n[3 MB]").AddFiles(
 						"november.txt\n[file]\n[1 MB]",
 						"echo.txt\n[file]\n[2 MB]",
 					),
 				),
 			),
-			NewDir("bravo").AddFiles("kilo.txt"),
-			NewDir("alfa"),
-			NewFile("hotel.txt"),
+			asciitree.NewDir("bravo").AddFiles("kilo.txt"),
+			asciitree.NewDir("alfa"),
+			asciitree.NewFile("hotel.txt"),
 		)
 		tree.Sort()
 	}
 }
 
 func BenchmarkNode_String(b *testing.B) {
-	tree := NewDir("alfa").Add(
-		NewFile("bravo.txt"),
-		NewDir("charlie").Add(
-			NewFile("delta.txt"),
-			NewDir("echo").AddFiles("foxtrot.txt"),
-			NewDir("golf").Add(
-				NewDir("hotel\n[dir]\n[3 MB]").AddFiles(
+	tree := asciitree.NewDir("alfa").Add(
+		asciitree.NewFile("bravo.txt"),
+		asciitree.NewDir("charlie").Add(
+			asciitree.NewFile("delta.txt"),
+			asciitree.NewDir("echo").AddFiles("foxtrot.txt"),
+			asciitree.NewDir("golf").Add(
+				asciitree.NewDir("hotel\n[dir]\n[3 MB]").AddFiles(
 					"india.txt\n[file]\n[1 MB]",
 					"juliet.txt\n[file]\n[2 MB]",
 				),
 			),
 		),
-		NewDir("kilo").AddFiles("lima.txt"),
-		NewDir("mike"),
-		NewFile("november.txt"),
+		asciitree.NewDir("kilo").AddFiles("lima.txt"),
+		asciitree.NewDir("mike"),
+		asciitree.NewFile("november.txt"),
 	)
 	for i := 0; i < b.N; i++ {
 		result = tree.String()
